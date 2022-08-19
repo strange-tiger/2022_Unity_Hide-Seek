@@ -27,14 +27,14 @@ public class PlayerHealth : MonoBehaviour
         // gameObject.SetActive(false);
         _movement.enabled = false;
     }
-    
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Enemy")
         {
             transform.LookAt(collision.transform.position + DeathSightHeight * Vector3.up);
             // Debug.Log("Ouch");
-            
+
             Die();
             // Debug.Log("captured");
         }
@@ -43,8 +43,8 @@ public class PlayerHealth : MonoBehaviour
     //{
     //    if (other.tag == "Enemy")
     //    {
+    //        transform.LookAt(other.transform.position + DeathSightHeight * Vector3.up);
     //        Die();
-    //        transform.LookAt(other.transform.position + Vector3.up);
     //    }
     //}
 }

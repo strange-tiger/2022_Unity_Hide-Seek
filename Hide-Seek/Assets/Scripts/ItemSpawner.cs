@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public enum ItemIndex
 {
     Key,
-    Ward,
+    // Ward,
     Max
 }
 
@@ -22,6 +23,7 @@ public class ItemSpawner : MonoBehaviour
 
     private void Awake()
     {
+        // _navMeshAgent = GetComponent<NavMeshAgent>();
         generateItems();
     }
 
@@ -38,7 +40,7 @@ public class ItemSpawner : MonoBehaviour
         {
             _items[j] = new GameObject[ItemCount[j]];
             Debug.Log(ItemCount[j]);
-            Debug.Log(ItemKinds[j] == null);
+            Debug.Log(ItemKinds[j] != null);
             for (int i = 0; i < ItemCount[j]; ++i)
             {
                 _items[j][i] = Instantiate(ItemKinds[j], transform.position + _positions[j][i], Quaternion.identity);
@@ -60,6 +62,7 @@ public class ItemSpawner : MonoBehaviour
             }
         }
 
+        int count = 0;
         _positions = new Vector3[ItemKind][];
         for (int j = 0; j < ItemKind; ++j)
         {
@@ -69,15 +72,20 @@ public class ItemSpawner : MonoBehaviour
             {
                 int x;
                 int y;
+                Vector3 positionCandidate;
+               
                 do
                 {
                     x = Random.Range(2, PositionRange - 1);
                     y = Random.Range(2, PositionRange - 1);
+                count++;
+                Debug.Assert(count < 50);
                 }
                 while (_positionUsedArr[y, x] == true);
-
                 _positionUsedArr[y, x] = true;
-                _positions[j][i] = new Vector3(x, FloatHeight, y);
+                positionCandidate = new Vector3(x, FloatHeight, y);
+
+                _positions[j][i] = positionCandidate;
             }
         }
     }

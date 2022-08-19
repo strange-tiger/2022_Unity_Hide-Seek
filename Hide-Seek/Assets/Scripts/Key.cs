@@ -2,13 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Key : MonoBehaviour
+public class Key : Item
 {
-    public float rotationSpeed = 60f;
-
     private void Update()
     {
-        transform.Rotate(0f, rotationSpeed * Time.deltaTime, 0f);
+        base.Update();
     }
 
     private void OnTriggerEnter(Collider other)
