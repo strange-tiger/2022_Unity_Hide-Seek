@@ -17,13 +17,15 @@ public class ItemSpawner : MonoBehaviour
     public int PositionRange;
     public float FloatHeight = 0.5f;
 
+    private NavMeshAgent _navMeshAgent;
     private GameObject[][] _items;
     private Vector3[][] _positions;
     private bool[,] _positionUsedArr; 
 
     private void Awake()
     {
-        // _navMeshAgent = GetComponent<NavMeshAgent>();
+        _navMeshAgent = GetComponent<NavMeshAgent>();
+        _navMeshAgent.isStopped = true;
         generateItems();
     }
 
@@ -39,8 +41,8 @@ public class ItemSpawner : MonoBehaviour
         for (int j = 0; j < itemKind; ++j)
         {
             _items[j] = new GameObject[ItemCount[j]];
-            Debug.Log(ItemCount[j]);
-            Debug.Log(ItemKinds[j] != null);
+            //Debug.Log(ItemCount[j]);
+            //Debug.Log(ItemKinds[j] != null);
             for (int i = 0; i < ItemCount[j]; ++i)
             {
                 _items[j][i] = Instantiate(ItemKinds[j], transform.position + _positions[j][i], Quaternion.identity);
@@ -73,17 +75,23 @@ public class ItemSpawner : MonoBehaviour
                 int x;
                 int y;
                 Vector3 positionCandidate;
-               
+
                 do
                 {
-                    x = Random.Range(2, PositionRange - 1);
-                    y = Random.Range(2, PositionRange - 1);
-                count++;
-                Debug.Assert(count < 50);
+                    do
+                    {
+                        x = Random.Range(2, PositionRange - 1);
+                        y = Random.Range(2, PositionRange - 1);
+                        count++;
+                        Debug.Assert(count < 50);
+                    }
+                    while (_positionUsedArr[y, x] == true);
+                    _positionUsedArr[y, x] = true;
+                    positionCandidate = new Vector3(x, FloatHeight, y);
+
+                    _navMeshAgent.SetDestination(positionCandidate);
                 }
-                while (_positionUsedArr[y, x] == true);
-                _positionUsedArr[y, x] = true;
-                positionCandidate = new Vector3(x, FloatHeight, y);
+                while (_navMeshAgent.destination != transform.position);
 
                 _positions[j][i] = positionCandidate;
             }

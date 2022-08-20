@@ -111,6 +111,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd6ef2ec903824645b87242e9aafe1ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  markerLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  marker: {fileID: 0}
   rotationSpeed: 60
 --- !u!1001 &84726810959589603
 PrefabInstance:

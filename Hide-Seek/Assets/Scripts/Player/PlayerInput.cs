@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,8 +17,10 @@ public class PlayerInput : MonoBehaviour
     public float RotateX { get; private set; }
     public float RotateY { get; private set; }
 
-    public bool FullMapOn { get; private set; }
-    // public Vector3 ViewPosition { get; private set; }
+    public event Action<bool> OnFullMap;
+    public bool IsFullMap { get; private set; }
+
+    public event Action UseWard;
 
     private PlayerHealth _health;
     private void Awake()
@@ -26,7 +29,7 @@ public class PlayerInput : MonoBehaviour
         MoveRight = 0f;
         RotateX = 0f;
         RotateY = 0f;
-        FullMapOn = false;
+        IsFullMap = false;
 
         _health = GetComponent<PlayerHealth>();
         _health.OnDeath -= this.reset; 
@@ -39,7 +42,13 @@ public class PlayerInput : MonoBehaviour
         MoveRight = 0f;
         RotateX = 0f;
         RotateY = 0f;
-        FullMapOn = false;
+        IsFullMap = false;
+    }
+
+    private void Update()
+    {
+        UpdateFullMapToggle();
+        UpdateUseWard();
     }
 
     public void UpdateMove()
@@ -58,7 +67,16 @@ public class PlayerInput : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.M))
         {
-            FullMapOn = !FullMapOn;
+            IsFullMap = !IsFullMap;
+            OnFullMap?.Invoke(IsFullMap);
+        }
+    }
+
+    public void UpdateUseWard()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            UseWard?.Invoke();
         }
     }
 }

@@ -4,16 +4,22 @@ using UnityEngine;
 
 public class Key : Item
 {
-    private void Update()
+    private new void Awake()
+    {
+        base.Awake();
+    }
+
+    private new void Update()
     {
         base.Update();
     }
 
-    private void OnTriggerEnter(Collider other)
+    private new void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player")
-        {
-            gameObject.SetActive(false);
-        }
+        base.OnTriggerEnter(other);
+    }
+    private new void OnTriggerExit(Collider other)
+    {
+        base.OnTriggerExit(other);
     }
 }

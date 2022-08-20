@@ -4,15 +4,23 @@ using UnityEngine;
 
 public class PlayerSetWard : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public GameObject Ward;
+
+    private PlayerInput _input;
+    private void Awake()
     {
-        
+        _input = GetComponent<PlayerInput>();
+
+        _input.UseWard -= SetWard;
+        _input.UseWard += SetWard;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SetWard()
     {
-        
+        if(!Ward.activeSelf)
+        {
+            Ward.transform.position = transform.position;
+            Ward.SetActive(true);
+        }
     }
 }

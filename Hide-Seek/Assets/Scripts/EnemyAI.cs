@@ -19,19 +19,17 @@ public static class EnemyAnimID
     public static readonly int IsRun = Animator.StringToHash("IsRun");
 }
 
-public class EnemyAI : MonoBehaviour
+public class EnemyAI : Detectable
 {
     public LayerMask TargetLayer;
-    public LayerMask MarkerLayer;
     public EnemyState State;
     public EnemyState PrevState = EnemyState.None;
     public float WalkSpeed = 1f;
     public float RunSpeed = 5.5f;
     public float IdleTime = 2f;
-    public float WalkTime = 3f;
+    public float WalkTime = 5f;
 
     private Transform _target;
-    private GameObject _marker;
     private NavMeshAgent _navMeshAgent;
     private Rigidbody _rigidbody;
     private Animator _animator;
@@ -53,7 +51,7 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    private void Awake()
+    private new void Awake()
     {
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _rigidbody = GetComponent<Rigidbody>();
@@ -61,15 +59,7 @@ public class EnemyAI : MonoBehaviour
         // _audioSource = GetComponent<AudioSource>();
         // _renderer = GetComponent<Renderer>();
 
-        for (int i = 0; i < transform.childCount; ++i)
-        {
-            if(transform.GetChild(i).gameObject.layer == MarkerLayer.value)
-            {
-                // Debug.Log("Success");
-                _marker = transform.GetChild(i).gameObject;
-                _marker.SetActive(false);
-            }
-        }
+        base.Awake();
 
         ChangeState(EnemyState.Idle);
     }
@@ -97,6 +87,8 @@ public class EnemyAI : MonoBehaviour
             _elapsedTime += Time.deltaTime;
             return;
         }
+        _elapsedTime = 0f;
+
         if (FindTarget())
         {
             ChangeState(EnemyState.Run);
@@ -111,6 +103,8 @@ public class EnemyAI : MonoBehaviour
             _elapsedTime += Time.deltaTime;
             return;
         }
+        _elapsedTime = 0f;
+
         if (FindTarget())
         {
             ChangeState(EnemyState.Run);
@@ -158,28 +152,17 @@ public class EnemyAI : MonoBehaviour
     {
         _animator.SetBool(EnemyAnimID.IsWalk, true);
 
-        Vector3 destination = Vector3.zero;
-        Collider[] destinationCandidates = new Collider[5];
-        int destinationCandidateCount = Physics.OverlapSphereNonAlloc(transform.position, 40f, destinationCandidates, TargetLayer);
-
-        for (int i = 0; i < _targetCandidateCount; ++i)
-        {
-            Collider destinationCandidate = destinationCandidates[i];
-
-            Debug.Assert(destinationCandidate != null);
-            if (destinationCandidate != null)
-            {
-                destination = destinationCandidate.GetComponent<Transform>().position;
-
-                break;
-            }
-        }
-
-        _navMeshAgent.isStopped = false;
+        Vector3 destination = (WalkTime * WalkSpeed) * transform.forward + transform.position;
+        
         _navMeshAgent.speed = WalkSpeed;
+        _navMeshAgent.isStopped = false;
         _navMeshAgent.SetDestination(destination);
-        if(!_navMeshAgent.hasPath)
+        
+        if(_navMeshAgent.destination == transform.position)
         {
+            _navMeshAgent.isStopped = true;
+
+            transform.rotation *= Quaternion.Euler(0f, Random.Range(-1, 2) * 90f, 0f);
             ChangeState(EnemyState.Idle);
         }
 
@@ -208,7 +191,7 @@ public class EnemyAI : MonoBehaviour
     private int _targetCandidateCount;
     private bool FindTarget()
     {
-        _targetCandidateCount = Physics.OverlapSphereNonAlloc(transform.position, 40f, _targetCandidates, TargetLayer);
+        _targetCandidateCount = Physics.OverlapSphereNonAlloc(transform.position, 20f, _targetCandidates, TargetLayer);
 
         for (int i = 0; i < _targetCandidateCount; ++i)
         {
@@ -233,24 +216,18 @@ public class EnemyAI : MonoBehaviour
     public void TargetIsDead()
     {
         _targetIsDead = true;
-        _animator.SetTrigger(EnemyAnimID.OnCatch);
         _navMeshAgent.isStopped = true;
+        _animator.SetTrigger(EnemyAnimID.OnCatch);
     }
 
-    private void OnTriggerEnter(Collider other)
+    private new void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Sight")
-        {
-            _marker.SetActive(true);
-        }
+        base.OnTriggerEnter(other);
     }
 
-    private void OnTriggerExit(Collider other)
+    private new void OnTriggerExit(Collider other)
     {
-        if (other.tag == "Sight")
-        {
-            _marker.SetActive(false);
-        }
+        base.OnTriggerExit(other);
     }
 
     //private void controlMarker()
