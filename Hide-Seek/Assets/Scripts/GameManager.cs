@@ -1,0 +1,75 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.SceneManagement;
+
+public class GameManager : SingletonBehaviour<GameManager>
+{
+    public UnityEvent OnGameOver = new UnityEvent();
+    public UnityEvent<int> OnKeyChanged = new UnityEvent<int>();
+    public int CurrentKey
+    {
+        get
+        {
+            return _currentKey;
+        }
+        set
+        {
+            _currentKey = value;
+            OnKeyChanged.Invoke(_currentKey);
+        }
+    }
+    public UnityEvent<int> OnHealthChanged = new UnityEvent<int>();
+    public int HealthCount
+    {
+        get
+        {
+            return _healthCount;
+        }
+        set
+        {
+            _healthCount = value;
+            OnHealthChanged.Invoke(_healthCount);
+        }
+    }
+
+    private int _healthCount = 3;
+    private int _currentKey = 0;
+    private bool _isGameOver = false;
+    private void Start()    
+    {
+        reset();
+    }
+
+    private void reset()
+    {
+        CurrentKey = 0;
+        HealthCount = 3;
+        _isGameOver = false;
+    }
+
+    public void Restart()
+    {
+        if (_isGameOver)
+        {
+            reset();
+            SceneManager.LoadScene(0);
+        }
+    }
+
+    public void AddKey()
+    {
+        ++CurrentKey;
+    }
+
+    public void End()
+    {
+        --HealthCount;
+        if (HealthCount == 0)
+        {
+            _isGameOver = true;
+            OnGameOver.Invoke();
+        }
+    }
+}

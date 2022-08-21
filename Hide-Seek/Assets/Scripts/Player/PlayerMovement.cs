@@ -23,8 +23,7 @@ public class PlayerMovement : MonoBehaviour
     {
         move();
         rotate();
-
-        controlMarker();
+        //controlMarker();
     }
 
     private void move()
@@ -53,9 +52,9 @@ public class PlayerMovement : MonoBehaviour
         // Debug.Log("rotate");
     }
 
-    private void controlMarker()
-    {
-        Marker.transform.position = new Vector3(this.transform.position.x, Marker.transform.position.y, this.transform.position.z);
-        Marker.transform.forward = this.transform.forward;
-    }
+    //private void controlMarker()
+    //{
+    //    Marker.transform.position = new Vector3(this.transform.position.x, Marker.transform.position.y, this.transform.position.z);
+    //    Marker.transform.forward = this.transform.forward;
+    //}
 }

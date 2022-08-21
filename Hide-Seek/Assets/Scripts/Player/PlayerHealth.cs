@@ -3,17 +3,19 @@ using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
-    public float DeathSightHeight = 0.3f;
     public event Action OnDeath;
     public bool IsDead { get; private set; }
+    public float DeathSightHeight = 0.3f;
 
     private PlayerMovement _movement;
     private PlayerSetWard _setWard;
+    private Vector3 _playerInitialPosition;
     private void Awake()
     {
         IsDead = false;
         _movement = GetComponent<PlayerMovement>();
         _setWard = GetComponent<PlayerSetWard>();
+        _playerInitialPosition = transform.position;
     }
 
     private void OnEnable()
@@ -27,9 +29,16 @@ public class PlayerHealth : MonoBehaviour
         OnDeath?.Invoke();
         IsDead = true;
 
+        GameManager.Instance.End();
         // gameObject.SetActive(false);
         _movement.enabled = false;
         _setWard.enabled = false;
+    }
+
+    public void Revive()
+    {
+        transform.position = _playerInitialPosition;
+        transform.rotation = Quaternion.identity;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -43,12 +52,4 @@ public class PlayerHealth : MonoBehaviour
             // Debug.Log("captured");
         }
     }
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if (other.tag == "Enemy")
-    //    {
-    //        transform.LookAt(other.transform.position + DeathSightHeight * Vector3.up);
-    //        Die();
-    //    }
-    //}
 }

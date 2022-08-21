@@ -8,15 +8,16 @@ public enum EnemyState
     None,
     Idle,
     Walk,
+    Catch,
     Run
 }
 
 public static class EnemyAnimID
 {
-    public static readonly int OnCatch = Animator.StringToHash("OnCatch");
     public static readonly int IsIdle = Animator.StringToHash("IsIdle");
     public static readonly int IsWalk = Animator.StringToHash("IsWalk");
     public static readonly int IsRun = Animator.StringToHash("IsRun");
+    public static readonly int IsCatch = Animator.StringToHash("IsCatch");
 }
 
 public class EnemyAI : Detectable
@@ -28,6 +29,7 @@ public class EnemyAI : Detectable
     public float RunSpeed = 5.5f;
     public float IdleTime = 2f;
     public float WalkTime = 5f;
+    public float CatchTime = 5f;
 
     private Transform _target;
     private NavMeshAgent _navMeshAgent;
@@ -76,6 +78,7 @@ public class EnemyAI : Detectable
             case EnemyState.Idle: UpdateIdle(); break;
             case EnemyState.Walk: UpdateWalk(); break;
             case EnemyState.Run: UpdateRun(); break;
+            case EnemyState.Catch: UpdateCatch(); break;
         }
     }
 
@@ -116,6 +119,10 @@ public class EnemyAI : Detectable
     {
         
     }
+    void UpdateCatch()
+    {
+
+    }
 
     private void ChangeState(EnemyState nextState)
     {
@@ -128,12 +135,14 @@ public class EnemyAI : Detectable
         _animator.SetBool(EnemyAnimID.IsIdle, false);
         _animator.SetBool(EnemyAnimID.IsWalk, false);
         _animator.SetBool(EnemyAnimID.IsRun, false);
+        _animator.SetBool(EnemyAnimID.IsCatch, false);
 
         switch (State)
         {
             case EnemyState.Idle: StartCoroutine(CoroutineIdle()); break;
             case EnemyState.Walk: StartCoroutine(CoroutineWalk()); break;
             case EnemyState.Run: StartCoroutine(CoroutineRun()); break;
+            case EnemyState.Catch: StartCoroutine(CoroutineCatch()); break;
         }
     }
 
@@ -186,6 +195,14 @@ public class EnemyAI : Detectable
             yield return new WaitForSeconds(0.1f);
         }
     }
+    IEnumerator CoroutineCatch()
+    {
+        _animator.SetBool(EnemyAnimID.IsCatch, true);
+
+        yield return new WaitForSeconds(CatchTime);
+
+        ChangeState(EnemyState.Idle);
+    }
 
     private Collider[] _targetCandidates = new Collider[5];
     private int _targetCandidateCount;
@@ -217,7 +234,7 @@ public class EnemyAI : Detectable
     {
         _targetIsDead = true;
         _navMeshAgent.isStopped = true;
-        _animator.SetTrigger(EnemyAnimID.OnCatch);
+        ChangeState(EnemyState.Catch);
     }
 
     private new void OnTriggerEnter(Collider other)
