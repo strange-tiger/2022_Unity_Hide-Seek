@@ -2,20 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Key : MonoBehaviour
+public class Key : Item
 {
-    public float rotationSpeed = 60f;
-
-    private void Update()
+    private new void Awake()
     {
-        transform.Rotate(0f, rotationSpeed * Time.deltaTime, 0f);
+        base.Awake();
     }
 
-    private void OnTriggerEnter(Collider other)
+    private new void Update()
     {
-        if (other.tag == "Player")
-        {
-            gameObject.SetActive(false);
-        }
+        base.Update();
+    }
+
+    private new void OnTriggerEnter(Collider other)
+    {
+        base.OnTriggerEnter(other);
+    }
+    private new void OnTriggerExit(Collider other)
+    {
+        base.OnTriggerExit(other);
     }
 }

@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public GameObject Marker;
     public float MoveSpeed = 5f;
     public float RotateXAxisSpeed = 30f;
-    public float RotateYAxisSpeed = 10f;
+    public float RotateYAxisSpeed = 300f;
     public float XAngleLimit = 60f;
     
     private PlayerInput _input;
@@ -22,6 +23,8 @@ public class PlayerMovement : MonoBehaviour
     {
         move();
         rotate();
+
+        controlMarker();
     }
 
     private void move()
@@ -39,20 +42,20 @@ public class PlayerMovement : MonoBehaviour
     private void rotate()
     {
         _input.UpdateRotate();
-        rotationXAmount = RotateXAxisSpeed * _input.RotateX;
-        rotationYAmount = RotateYAxisSpeed * _input.RotateY;
+        //rotationXAmount = RotateXAxisSpeed * _input.RotateX;
+        rotationYAmount = RotateYAxisSpeed * _input.RotateY * Time.fixedDeltaTime;
 
-        rotationX = Mathf.Clamp(rotationX + rotationXAmount, -XAngleLimit, XAngleLimit);
-        float rotationY = transform.eulerAngles.y + rotationYAmount;
-        Quaternion rotation = Quaternion.Euler(rotationX, rotationY, 0f);
+        //rotationX = Mathf.Clamp(rotationX + rotationXAmount, -XAngleLimit, XAngleLimit);
+        float rotationY = /*transform.eulerAngles.y + */rotationYAmount;
+        Quaternion deltaRotation = Quaternion.Euler(rotationX, rotationY, 0f);
 
-        if (_elapsedTime >= 1f)
-        {
-            _elapsedTime = 0f;
-        }
-
-        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, _elapsedTime);
-        _elapsedTime += Time.fixedDeltaTime;
+        _rigidbody.MoveRotation(_rigidbody.rotation * deltaRotation);
         // Debug.Log("rotate");
+    }
+
+    private void controlMarker()
+    {
+        Marker.transform.position = new Vector3(this.transform.position.x, Marker.transform.position.y, this.transform.position.z);
+        Marker.transform.forward = this.transform.forward;
     }
 }
