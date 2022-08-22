@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Key : Item
 {
+    public float GetItemDist = 2f;
+
     private new void Awake()
     {
         base.Awake();
@@ -14,9 +16,21 @@ public class Key : Item
         base.Update();
     }
 
-    private new void OnTriggerEnter(Collider other)
+    private new void OnTriggerStay(Collider other)
     {
-        base.OnTriggerEnter(other);
+        base.OnTriggerStay(other);
+
+        if (other.tag != "Player")
+        {
+            return;
+        }
+
+        Vector3 distance = other.transform.position - transform.position;
+        if(distance.sqrMagnitude < GetItemDist)
+        {
+            GameManager.Instance.AddKey();
+            gameObject.SetActive(false);
+        }
     }
     private new void OnTriggerExit(Collider other)
     {

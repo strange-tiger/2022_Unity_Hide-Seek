@@ -47,6 +47,9 @@ public class PlayerInput : MonoBehaviour
 
     private void Update()
     {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+
         UpdateFullMapToggle();
         UpdateUseWard();
     }
@@ -77,6 +80,7 @@ public class PlayerInput : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             UseWard?.Invoke();
+            Debug.Log("Set");
         }
     }
 }

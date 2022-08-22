@@ -6,10 +6,17 @@ public class Ward : Sight
 {
     public float Duration = 10f;
     public float CoolTime = 5f;
+    public float SightSize = 0.5f;
+
+    private new void Awake()
+    {
+        base.Awake();
+        gameObject.SetActive(false);
+    }
 
     private void OnEnable()
     {
-        transform.localScale = 0.5f * Vector3.one;
+        transform.localScale = SightSize * Vector3.one;
         StartCoroutine(Hold());
     }
 

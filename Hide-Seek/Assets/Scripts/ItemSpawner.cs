@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public enum ItemIndex
 {
     Key,
-    // Ward,
+    Sonar,
     Max
 }
 
@@ -26,6 +26,12 @@ public class ItemSpawner : MonoBehaviour
     {
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _navMeshAgent.isStopped = true;
+
+        if (ItemKinds[(int)ItemIndex.Key] != null)
+        {
+            ItemCount[(int)ItemIndex.Key] = GameManager.Instance.KeyCountMax;
+        }
+
         generateItems();
     }
 
@@ -64,36 +70,70 @@ public class ItemSpawner : MonoBehaviour
             }
         }
 
-        int count = 0;
         _positions = new Vector3[ItemKind][];
         for (int j = 0; j < ItemKind; ++j)
         {
             _positions[j] = new Vector3[ItemCount[j]];
 
-            for (int i = 0; i < ItemCount[j]; ++i)
-            {
                 int x;
                 int y;
                 Vector3 positionCandidate;
+            for (int i = 0; i < ItemCount[j]; ++i)
+            {
+                x = Random.Range(2, PositionRange - 1);
+                y = Random.Range(2, PositionRange - 1);
 
-                do
+                //count++;
+                //Debug.Assert(count < 50);
+
+                positionCandidate = new Vector3(x, FloatHeight, y);
+                if (_positionUsedArr[y, x] == true)
                 {
-                    do
-                    {
-                        x = Random.Range(2, PositionRange - 1);
-                        y = Random.Range(2, PositionRange - 1);
-                        count++;
-                        Debug.Assert(count < 50);
-                    }
-                    while (_positionUsedArr[y, x] == true);
-                    _positionUsedArr[y, x] = true;
-                    positionCandidate = new Vector3(x, FloatHeight, y);
-
-                    _navMeshAgent.SetDestination(positionCandidate);
+                    --i;
+                    Debug.Log("Recall");
+                    continue;
                 }
-                while (_navMeshAgent.destination != transform.position);
+                markUsedArea(y, x);
+
+                NavMeshPath path = new NavMeshPath();
+                if (!_navMeshAgent.CalculatePath(positionCandidate, path))
+                {
+                    --i;
+                    Debug.Log(_navMeshAgent.destination);
+                    continue;
+                }
+
+                //if((transform.position - _navMeshAgent.destination).magnitude < 1f)
+                ////if(!_navMeshAgent.hasPath)
+                //{
+                //    --i;
+                //    Debug.Log("Recall");
+                //    continue;
+                //}
+                //_navMeshAgent.SetDestination(transform.position);
 
                 _positions[j][i] = positionCandidate;
+            }
+        }
+    }
+
+    public int UsedArea = 20;
+    private void markUsedArea(int y, int x)
+    {
+        for (int j = -UsedArea; j <= UsedArea; ++j)
+        {
+            for (int i = -UsedArea; i <= UsedArea; ++i)
+            {
+                if (y + j <= 2 || y + j >= PositionRange - 1)
+                {
+                    continue;
+                }
+                if (x + i <= 2 || x + i >= PositionRange - 1)
+                {
+                    continue;
+                }
+
+                _positionUsedArr[y + j, x + i] = true;
             }
         }
     }
