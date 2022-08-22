@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : SingletonBehaviour<GameManager>
 {
     public UnityEvent OnGameOver = new UnityEvent();
+    public UnityEvent OnEscape = new UnityEvent();
     public UnityEvent<int> OnKeyChanged = new UnityEvent<int>();
     public int CurrentKey
     {
@@ -34,7 +35,10 @@ public class GameManager : SingletonBehaviour<GameManager>
         }
     }
 
-    private int _healthCount = 3;
+    public int KeyCountMax = 10;
+    public int InitHealthCount = 3;
+
+    private int _healthCount;
     private int _currentKey = 0;
     private bool _isGameOver = false;
     private void Start()    
@@ -45,7 +49,7 @@ public class GameManager : SingletonBehaviour<GameManager>
     private void reset()
     {
         CurrentKey = 0;
-        HealthCount = 3;
+        HealthCount = InitHealthCount;
         _isGameOver = false;
     }
 
@@ -75,5 +79,10 @@ public class GameManager : SingletonBehaviour<GameManager>
             _isGameOver = true;
             OnGameOver?.Invoke();
         }
+    }
+
+    public void Escape()
+    {
+        OnEscape?.Invoke();
     }
 }

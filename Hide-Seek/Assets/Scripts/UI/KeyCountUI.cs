@@ -3,16 +3,17 @@ using TMPro;
 
 public class KeyCountUI : MonoBehaviour
 {
-    public int KeyCountMax = 10;
 
     private TextMeshProUGUI _ui;
+    private int _keyCountMax;
     private void Awake()
     {
         _ui = GetComponent<TextMeshProUGUI>();
+        _keyCountMax = GameManager.Instance.KeyCountMax;
         UpdateText(0);
     }
 
-    public void UpdateText(int key) => _ui.text = $"{key} / {KeyCountMax}";
+    public void UpdateText(int key) => _ui.text = $"{key} / {_keyCountMax}";
 
     void OnEnable()
     {

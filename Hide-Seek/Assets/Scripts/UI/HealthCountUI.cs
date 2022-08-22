@@ -10,7 +10,7 @@ public class HealthCountUI : MonoBehaviour
     private void Awake()
     {
         _ui = GetComponent<TextMeshProUGUI>();
-        _initHealth = GameManager.Instance.HealthCount;
+        _initHealth = GameManager.Instance.InitHealthCount;
         _gameOverHealth = 0;
         //_ui.text = $"X {_initHealth}";
     }

@@ -26,6 +26,12 @@ public class ItemSpawner : MonoBehaviour
     {
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _navMeshAgent.isStopped = true;
+
+        if (ItemKinds[0] != null && (ItemKinds[0].name == "testKey" || ItemKinds[0].name == "Key"))
+        {
+            ItemCount[0] = GameManager.Instance.KeyCountMax;
+        }
+
         generateItems();
     }
 
@@ -53,7 +59,6 @@ public class ItemSpawner : MonoBehaviour
         }
     }
 
-    int count = 0;
     private void setItemPositionArr(int ItemKind)
     {
         _positionUsedArr = new bool[PositionRange, PositionRange];

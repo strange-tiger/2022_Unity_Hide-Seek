@@ -240,15 +240,17 @@ public class EnemyAI : Detectable
     }
 
     public void TargetGameOver() => _targetGameOver = true;
-
+    public void TargetEscaped() => gameObject.SetActive(false);
     private void OnEnable()
     {
         GameManager.Instance.OnGameOver.AddListener(TargetGameOver);
+        GameManager.Instance.OnEscape.AddListener(TargetEscaped);
     }
 
     private void OnDisable()
     {
         GameManager.Instance.OnGameOver.RemoveListener(TargetGameOver);
+        GameManager.Instance.OnEscape.RemoveListener(TargetEscaped);
     }
 
     private new void OnTriggerStay(Collider other)
