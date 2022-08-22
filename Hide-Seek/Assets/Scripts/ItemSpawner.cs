@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public enum ItemIndex
 {
     Key,
-    // Ward,
+    Sonar,
     Max
 }
 
@@ -27,9 +27,9 @@ public class ItemSpawner : MonoBehaviour
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _navMeshAgent.isStopped = true;
 
-        if (ItemKinds[0] != null && (ItemKinds[0].name == "testKey" || ItemKinds[0].name == "Key"))
+        if (ItemKinds[(int)ItemIndex.Key] != null)
         {
-            ItemCount[0] = GameManager.Instance.KeyCountMax;
+            ItemCount[(int)ItemIndex.Key] = GameManager.Instance.KeyCountMax;
         }
 
         generateItems();

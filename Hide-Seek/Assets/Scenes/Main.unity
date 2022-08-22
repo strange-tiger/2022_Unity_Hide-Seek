@@ -40433,7 +40433,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   markerLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
   marker: {fileID: 0}
   rotationSpeed: 60
   GetPortalDist: 2
@@ -84617,7 +84617,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemKinds:
   - {fileID: 3310320616513118985, guid: 4998f9efb28f75e4b8af78c6b56d92b9, type: 3}
-  ItemCount: 0a000000
+  - {fileID: 6445444432442205561, guid: 762c0fc8ceac5c04488f1faca6becf10, type: 3}
+  ItemCount: 0a00000002000000
   PositionRange: 200
   FloatHeight: 0.5
   UsedArea: 20
