@@ -23,7 +23,6 @@ public class PlayerMovement : MonoBehaviour
     {
         move();
         rotate();
-        //controlMarker();
     }
 
     private void move()
@@ -50,6 +49,15 @@ public class PlayerMovement : MonoBehaviour
 
         _rigidbody.MoveRotation(_rigidbody.rotation * deltaRotation);
         // Debug.Log("rotate");
+    }
+
+    public IEnumerator Shake()
+    {
+        while(true)
+        {
+
+            yield return new WaitForSeconds(Time.fixedDeltaTime);
+        }
     }
 
     //private void controlMarker()

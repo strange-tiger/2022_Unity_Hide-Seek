@@ -23,6 +23,7 @@ public class PlayerInput : MonoBehaviour
     public event Action UseWard;
 
     private PlayerHealth _health;
+    private bool _cursorLock = true;
     private void Awake()
     {
         MoveFront = 0f;
@@ -43,13 +44,12 @@ public class PlayerInput : MonoBehaviour
         RotateX = 0f;
         RotateY = 0f;
         IsFullMap = false;
+        _cursorLock = true;
     }
 
     private void Update()
     {
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
-
+        LockCursor();
         UpdateFullMapToggle();
         UpdateUseWard();
     }
@@ -80,7 +80,34 @@ public class PlayerInput : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             UseWard?.Invoke();
-            Debug.Log("Set");
+            // Debug.Log("Set");
         }
+    }
+
+    private void LockCursor()
+    {
+        if (_cursorLock)
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+        else
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.Confined;
+        }
+    }
+
+    public void SetCursorLock() => _cursorLock = false;
+    private void OnEnable()
+    {
+        GameManager.Instance.OnGameOver.AddListener(SetCursorLock);
+        GameManager.Instance.OnEscape.AddListener(SetCursorLock);
+    }
+
+    private void OnDisable()
+    {
+        GameManager.Instance.OnGameOver.RemoveListener(SetCursorLock);
+        GameManager.Instance.OnEscape.RemoveListener(SetCursorLock);
     }
 }

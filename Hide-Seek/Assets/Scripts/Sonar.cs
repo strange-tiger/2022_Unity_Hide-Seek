@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Sonar : Sight
 {
-    public float MaxSize = 2.3f;
+    public float MaxSize = 2f;
     public float Duration = 9f;
 
     private float _duration;

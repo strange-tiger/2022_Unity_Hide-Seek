@@ -117,7 +117,7 @@ public class ItemSpawner : MonoBehaviour
         }
     }
 
-    public int UsedArea = 20;
+    public int UsedArea = 10;
     private void markUsedArea(int y, int x)
     {
         for (int j = -UsedArea; j <= UsedArea; ++j)

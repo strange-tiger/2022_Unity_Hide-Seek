@@ -23,7 +23,7 @@ public class HealthCountUI : MonoBehaviour
         { 
             return;
         }
-        if (health == _gameOverHealth)
+        if (health <= _gameOverHealth)
         {
             return;
         }
