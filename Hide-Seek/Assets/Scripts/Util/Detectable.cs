@@ -20,7 +20,7 @@ public class Detectable : MonoBehaviour
         }
     }
 
-    protected void OnTriggerEnter(Collider other)
+    protected void OnTriggerStay(Collider other)
     {
         if (other.tag == "Player" || other.tag == "Ward")
         {

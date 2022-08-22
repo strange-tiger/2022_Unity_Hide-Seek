@@ -17,7 +17,7 @@ public class GameManager : SingletonBehaviour<GameManager>
         set
         {
             _currentKey = value;
-            OnKeyChanged.Invoke(_currentKey);
+            OnKeyChanged?.Invoke(_currentKey);
         }
     }
     public UnityEvent<int> OnHealthChanged = new UnityEvent<int>();
@@ -30,7 +30,7 @@ public class GameManager : SingletonBehaviour<GameManager>
         set
         {
             _healthCount = value;
-            OnHealthChanged.Invoke(_healthCount);
+            OnHealthChanged?.Invoke(_healthCount);
         }
     }
 
@@ -63,13 +63,17 @@ public class GameManager : SingletonBehaviour<GameManager>
         ++CurrentKey;
     }
 
-    public void End()
+    public void SubHealth()
     {
         --HealthCount;
+    }
+
+    public void End()
+    {
         if (HealthCount == 0)
         {
             _isGameOver = true;
-            OnGameOver.Invoke();
+            OnGameOver?.Invoke();
         }
     }
 }

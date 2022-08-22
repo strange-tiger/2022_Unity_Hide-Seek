@@ -38,7 +38,7 @@ public class EnemyAI : Detectable
     private AudioSource _audioSource;
     private Renderer _renderer;
 
-    private bool _targetIsDead = false;
+    private bool _targetGameOver = false;
     private bool _hasTargetFound = false;
     public bool HasTargetFound
     {
@@ -121,7 +121,7 @@ public class EnemyAI : Detectable
     }
     void UpdateCatch()
     {
-
+        
     }
 
     private void ChangeState(EnemyState nextState)
@@ -199,9 +199,12 @@ public class EnemyAI : Detectable
     {
         _animator.SetBool(EnemyAnimID.IsCatch, true);
 
-        yield return new WaitForSeconds(CatchTime);
+        while (true)
+        {
+            yield return new WaitForSeconds(CatchTime);
 
-        ChangeState(EnemyState.Idle);
+            ChangeState(EnemyState.Idle);
+        }
     }
 
     private Collider[] _targetCandidates = new Collider[5];
@@ -215,13 +218,13 @@ public class EnemyAI : Detectable
             Collider targetCandidate = _targetCandidates[i];
 
             Debug.Assert(targetCandidate != null);
-            if (targetCandidate != null && !_targetIsDead)
+            if (targetCandidate != null && !_targetGameOver)
             {
                 _target = targetCandidate.GetComponent<Transform>(); ;
                 PlayerHealth playerHealth = _target.GetComponent<PlayerHealth>();
 
-                playerHealth.OnDeath -= this.TargetIsDead;
-                playerHealth.OnDeath += this.TargetIsDead;
+                playerHealth.OnDeath -= this.TargetCatched;
+                playerHealth.OnDeath += this.TargetCatched;
 
                 return true;
             }
@@ -230,16 +233,27 @@ public class EnemyAI : Detectable
         return false;
     }
 
-    public void TargetIsDead()
+    public void TargetCatched()
     {
-        _targetIsDead = true;
-        _navMeshAgent.isStopped = true;
+        Debug.Log("Catch");
         ChangeState(EnemyState.Catch);
     }
 
-    private new void OnTriggerEnter(Collider other)
+    public void TargetGameOver() => _targetGameOver = true;
+
+    private void OnEnable()
     {
-        base.OnTriggerEnter(other);
+        GameManager.Instance.OnGameOver.AddListener(TargetGameOver);
+    }
+
+    private void OnDisable()
+    {
+        GameManager.Instance.OnGameOver.RemoveListener(TargetGameOver);
+    }
+
+    private new void OnTriggerStay(Collider other)
+    {
+        base.OnTriggerStay(other);
     }
 
     private new void OnTriggerExit(Collider other)

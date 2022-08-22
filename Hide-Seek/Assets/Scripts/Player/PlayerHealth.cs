@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
@@ -10,26 +11,23 @@ public class PlayerHealth : MonoBehaviour
     private PlayerMovement _movement;
     private PlayerSetWard _setWard;
     private Vector3 _playerInitialPosition;
+    private bool _revivable;
     private void Awake()
     {
         IsDead = false;
+        _revivable = true;
         _movement = GetComponent<PlayerMovement>();
         _setWard = GetComponent<PlayerSetWard>();
         _playerInitialPosition = transform.position;
     }
 
-    private void OnEnable()
-    {
-        _movement.enabled = true;
-        _setWard.enabled = true;
-    }
-
     public void Die()
     {
+        Revive();
+        GameManager.Instance.End();
         OnDeath?.Invoke();
         IsDead = true;
 
-        GameManager.Instance.End();
         // gameObject.SetActive(false);
         _movement.enabled = false;
         _setWard.enabled = false;
@@ -37,8 +35,35 @@ public class PlayerHealth : MonoBehaviour
 
     public void Revive()
     {
+        if (!_revivable)
+        {
+            return;
+        }
+        StartCoroutine(WaitRevive());
+    }
+    public IEnumerator WaitRevive()
+    {
+        yield return new WaitForSeconds(3f);
+        _movement.enabled = true;
+        _setWard.enabled = true;
+
         transform.position = _playerInitialPosition;
         transform.rotation = Quaternion.identity;
+
+        GameManager.Instance.SubHealth();
+    }
+
+    public void SetRevivable() => _revivable = false;
+    private void OnEnable()
+    {
+        _movement.enabled = true;
+        _setWard.enabled = true;
+        GameManager.Instance.OnGameOver.AddListener(SetRevivable);
+    }
+
+    private void OnDisable()
+    {
+        GameManager.Instance.OnGameOver.RemoveListener(SetRevivable);
     }
 
     private void OnCollisionEnter(Collision collision)
