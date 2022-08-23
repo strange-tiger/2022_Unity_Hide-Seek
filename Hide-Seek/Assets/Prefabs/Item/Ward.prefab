@@ -114,9 +114,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   input: {fileID: 0}
   markerName: Marker_S
-  Duration: 10
-  CoolTime: 5
   SightSize: 0.5
+  Duration: 10
+  Cooltime: 5
+  CurrentGauge: 10
   RotationSpeed: 60
 --- !u!1001 &5880835151521083321
 PrefabInstance:

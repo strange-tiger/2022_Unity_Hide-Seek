@@ -1,16 +1,32 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Ward : Sight
 {
-    public float Duration = 10f;
-    public float CoolTime = 5f;
     public float SightSize = 0.5f;
+    public float Duration = 10f;
+    public float Cooltime = 5f;
+    public event Action<float> GaugeChanged;
+    public float CurrentGauge
+    {
+        get
+        {
+            return _currentGauge;
+        }
+        set
+        {
+            _currentGauge = value;
+            GaugeChanged?.Invoke(_currentGauge);
+        }
+    }
 
+    private float _currentGauge;
     private new void Awake()
     {
         base.Awake();
+        CurrentGauge = Duration;
         gameObject.SetActive(false);
     }
 
@@ -22,10 +38,21 @@ public class Ward : Sight
 
     public IEnumerator Hold()
     {
-        yield return new WaitForSeconds(Duration);
+        while (CurrentGauge > 0f)
+        {
+            yield return new WaitForSeconds(Time.deltaTime);
+            CurrentGauge -= Time.deltaTime;
+        }
         transform.localScale = 0.01f * Vector3.one;
-        
-        yield return new WaitForSeconds(CoolTime);
+
+        int coefficient = (int)(Duration / Cooltime);
+        Debug.Log(coefficient);
+        while (CurrentGauge < Cooltime * coefficient)
+        {
+            yield return new WaitForSeconds(Time.deltaTime);
+            CurrentGauge += Time.deltaTime * Duration / Cooltime;
+        }
+        CurrentGauge = Duration;
         gameObject.SetActive(false);
     }
 
