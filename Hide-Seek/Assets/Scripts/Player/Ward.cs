@@ -28,4 +28,10 @@ public class Ward : Sight
         yield return new WaitForSeconds(CoolTime);
         gameObject.SetActive(false);
     }
+
+    public float RotationSpeed = 60f;
+    private void Update()
+    {
+        transform.Rotate(0f, RotationSpeed * Time.deltaTime, 0f);
+    }
 }
