@@ -25,8 +25,9 @@ public class EnemyAI : Detectable
     public LayerMask TargetLayer;
     public EnemyState State;
     public EnemyState PrevState = EnemyState.None;
+    public Vector3 InitPosition = Vector3.zero;
     public float WalkSpeed = 1f;
-    public float RunSpeed = 7f;
+    public float RunSpeed = 5f;
     public float IdleTime = 2f;
     public float WalkTime = 5f;
     public float CatchTime = 5f;
@@ -62,6 +63,11 @@ public class EnemyAI : Detectable
         // _renderer = GetComponent<Renderer>();
 
         base.Awake();
+
+        if(InitPosition == Vector3.zero)
+        {
+            InitPosition = transform.position;
+        }
 
         ChangeState(EnemyState.Idle);
     }
@@ -202,9 +208,19 @@ public class EnemyAI : Detectable
         while (true)
         {
             yield return new WaitForSeconds(CatchTime);
-
+            
+            backToPosition();
             ChangeState(EnemyState.Idle);
         }
+    }
+
+    private void backToPosition()
+    {
+        if (_targetGameOver)
+        {
+            return;
+        }
+        transform.position = InitPosition;
     }
 
     private Collider[] _targetCandidates = new Collider[5];

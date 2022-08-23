@@ -85,7 +85,7 @@ public class GameManager : SingletonBehaviour<GameManager>
 
     public void Escape()
     {
-        _isEscape = false;
+        _isEscape = true;
         OnEscape?.Invoke();
     }
 }

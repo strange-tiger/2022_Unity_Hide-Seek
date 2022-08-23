@@ -1044,8 +1044,9 @@ MonoBehaviour:
     m_Bits: 8
   State: 0
   PrevState: 0
+  InitPosition: {x: 0, y: 0, z: 0}
   WalkSpeed: 1
-  RunSpeed: 7
+  RunSpeed: 5
   IdleTime: 2
   WalkTime: 5
   CatchTime: 5

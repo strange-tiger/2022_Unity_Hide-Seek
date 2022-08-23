@@ -17,14 +17,14 @@ public class HealthCountUI : MonoBehaviour
 
     public void UpdateText(int health)
     {
-        _ui.text = $"X {health}";
-        
-        if (health == _initHealth)
-        { 
+        if (health < _gameOverHealth)
+        {
             return;
         }
-        if (health <= _gameOverHealth)
-        {
+        
+        _ui.text = $"X {health}";
+        if (health == _initHealth || health == _gameOverHealth)
+        { 
             return;
         }
         StartCoroutine(ChangeSize());
