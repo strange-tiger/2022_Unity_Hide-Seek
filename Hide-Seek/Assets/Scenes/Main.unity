@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -106,15 +106,15 @@ NavMeshSettings:
   m_BuildSettings:
     serializedVersion: 2
     agentTypeID: 0
-    agentRadius: 2
+    agentRadius: 0.5
     agentHeight: 1.5
     agentSlope: 45
-    agentClimb: 0.4
+    agentClimb: 0.75
     ledgeDropHeight: 0
     maxJumpAcrossDistance: 0
     minRegionArea: 2
     manualCellSize: 0
-    cellSize: 0.6666667
+    cellSize: 0.16666667
     manualTileSize: 0
     tileSize: 256
     accuratePlacement: 0
@@ -15451,10 +15451,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 607353248}
     m_Modifications:
-    - target: {fileID: 6687837350728345010, guid: 3568c4723b213c3408311bb7137e26e1, type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
     - target: {fileID: 8597383564527024002, guid: 3568c4723b213c3408311bb7137e26e1, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -28481,7 +28477,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 442319129}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -67.4, y: 0, z: -96.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -53179,7 +53175,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   KeyCountMax: 10
-  InitHealthCount: 3
+  InitHealthCount: 1
 --- !u!4 &826956842
 Transform:
   m_ObjectHideFlags: 0
@@ -84646,7 +84642,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 1356111346}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 2
+  m_Radius: 0.5
   m_Speed: 0.5
   m_Acceleration: 8
   avoidancePriority: 50
@@ -84655,7 +84651,7 @@ NavMeshAgent:
   m_AutoTraverseOffMeshLink: 0
   m_AutoBraking: 0
   m_AutoRepath: 0
-  m_Height: 2
+  m_Height: 1.5
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
@@ -132688,10 +132684,6 @@ PrefabInstance:
     - target: {fileID: 2916118504612131524, guid: 02355015304cfad49a4deed3da3fa389, type: 3}
       propertyPath: m_Name
       value: Enemy
-      objectReference: {fileID: 0}
-    - target: {fileID: 3256710022530677824, guid: 02355015304cfad49a4deed3da3fa389, type: 3}
-      propertyPath: m_BaseOffset
-      value: -0.3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 02355015304cfad49a4deed3da3fa389, type: 3}

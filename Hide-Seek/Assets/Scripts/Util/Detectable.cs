@@ -15,7 +15,7 @@ public class Detectable : MonoBehaviour
             {
                 marker = transform.GetChild(i).gameObject;
                 marker.SetActive(false);
-                Debug.Log($"Success:{marker.name}");
+                //Debug.Log($"Success:{marker.name}");
             }
         }
     }

@@ -10,15 +10,9 @@ public class SonarItem : Item
     private bool _used = false;
     private new void Awake()
     {
+        base.Awake();
         for (int i = 0; i < transform.childCount; ++i)
         {
-            if ((1 << transform.GetChild(i).gameObject.layer) == markerLayer.value)
-            {
-                marker = transform.GetChild(i).gameObject;
-                marker.SetActive(false);
-                Debug.Log($"Success:{marker.name}");
-            }
-
             if (transform.GetChild(i).name == "Sonar")
             {
                 _sonar = transform.GetChild(i).gameObject;

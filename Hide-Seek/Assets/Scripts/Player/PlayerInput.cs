@@ -31,6 +31,7 @@ public class PlayerInput : MonoBehaviour
         RotateX = 0f;
         RotateY = 0f;
         IsFullMap = false;
+        _cursorLock = true;
 
         _health = GetComponent<PlayerHealth>();
         _health.OnDeath -= this.reset; 
@@ -44,7 +45,6 @@ public class PlayerInput : MonoBehaviour
         RotateX = 0f;
         RotateY = 0f;
         IsFullMap = false;
-        _cursorLock = true;
     }
 
     private void Update()
@@ -77,7 +77,7 @@ public class PlayerInput : MonoBehaviour
 
     public void UpdateUseWard()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKey(KeyCode.Space))
         {
             UseWard?.Invoke();
             // Debug.Log("Set");

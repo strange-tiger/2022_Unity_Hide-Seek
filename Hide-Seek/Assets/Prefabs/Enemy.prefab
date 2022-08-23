@@ -1048,6 +1048,7 @@ MonoBehaviour:
   RunSpeed: 5.5
   IdleTime: 2
   WalkTime: 5
+  CatchTime: 5
 --- !u!95 &4608805180196162864
 Animator:
   serializedVersion: 4

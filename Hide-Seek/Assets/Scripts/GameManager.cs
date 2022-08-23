@@ -41,6 +41,7 @@ public class GameManager : SingletonBehaviour<GameManager>
     private int _healthCount;
     private int _currentKey = 0;
     private bool _isGameOver = false;
+    private bool _isEscape = false;
     private void Start()    
     {
         reset();
@@ -51,11 +52,12 @@ public class GameManager : SingletonBehaviour<GameManager>
         CurrentKey = 0;
         HealthCount = InitHealthCount;
         _isGameOver = false;
+        _isEscape = false;
     }
 
     public void Restart()
     {
-        if (_isGameOver)
+        if (_isGameOver || _isEscape)
         {
             reset();
             SceneManager.LoadScene(0);
@@ -74,7 +76,7 @@ public class GameManager : SingletonBehaviour<GameManager>
 
     public void End()
     {
-        if (HealthCount == 0)
+        if (HealthCount <= 0)
         {
             _isGameOver = true;
             OnGameOver?.Invoke();
@@ -83,6 +85,7 @@ public class GameManager : SingletonBehaviour<GameManager>
 
     public void Escape()
     {
+        _isEscape = false;
         OnEscape?.Invoke();
     }
 }

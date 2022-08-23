@@ -75,9 +75,9 @@ public class ItemSpawner : MonoBehaviour
         {
             _positions[j] = new Vector3[ItemCount[j]];
 
-                int x;
-                int y;
-                Vector3 positionCandidate;
+            int x;
+            int y;
+            Vector3 positionCandidate;
             for (int i = 0; i < ItemCount[j]; ++i)
             {
                 x = Random.Range(2, PositionRange - 1);
@@ -99,7 +99,7 @@ public class ItemSpawner : MonoBehaviour
                 if (!_navMeshAgent.CalculatePath(positionCandidate, path))
                 {
                     --i;
-                    Debug.Log(_navMeshAgent.destination);
+                    //Debug.Log(_navMeshAgent.destination);
                     continue;
                 }
 
