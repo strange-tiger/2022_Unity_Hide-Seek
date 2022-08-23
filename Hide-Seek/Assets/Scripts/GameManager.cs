@@ -35,6 +35,19 @@ public class GameManager : SingletonBehaviour<GameManager>
             OnHealthChanged?.Invoke(_healthCount);
         }
     }
+    public UnityEvent<bool> OnPause = new UnityEvent<bool>();
+    public bool IsPause
+    {
+        get
+        {
+            return _isPause;
+        }
+        set
+        {
+            _isPause = value;
+            OnPause?.Invoke(_isPause);
+        }
+    }
 
     public int KeyCountMax = 10;
     public int InitHealthCount = 3;
@@ -43,6 +56,7 @@ public class GameManager : SingletonBehaviour<GameManager>
     private int _currentKey = 0;
     private bool _isGameOver = false;
     private bool _isEscape = false;
+    private bool _isPause = false;
     private void Start()    
     {
         reset();
@@ -54,11 +68,29 @@ public class GameManager : SingletonBehaviour<GameManager>
         HealthCount = InitHealthCount;
         _isGameOver = false;
         _isEscape = false;
+        IsPause = false;
+    }
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            IsPause = !IsPause;
+        }
     }
 
     public void Restart()
     {
-        if (_isGameOver || _isEscape)
+        if (_isGameOver || _isEscape || IsPause)
+        {
+            reset();
+            SceneManager.LoadScene(1);
+        }
+    }
+
+    public void LoadTitle()
+    {
+        if (_isGameOver || _isEscape || IsPause)
         {
             reset();
             SceneManager.LoadScene(0);

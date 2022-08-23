@@ -50,17 +50,25 @@ public class PlayerHealth : MonoBehaviour
     }
 
     public void SetRevivable() => _revivable = false;
+    public void SetMovable(bool isPause)
+    {
+        _movement.enabled = !isPause;
+        _setWard.enabled= !isPause;
+    }
     private void OnEnable()
     {
         _movement.enabled = true;
         _setWard.enabled = true;
         GameManager.Instance.OnGameOver.AddListener(SetRevivable);
+        GameManager.Instance.OnPause.AddListener(SetMovable);
     }
 
     private void OnDisable()
     {
         GameManager.Instance.OnGameOver.RemoveListener(SetRevivable);
+        GameManager.Instance.OnPause.RemoveListener(SetMovable);
     }
+
 
     private void OnCollisionEnter(Collision collision)
     {

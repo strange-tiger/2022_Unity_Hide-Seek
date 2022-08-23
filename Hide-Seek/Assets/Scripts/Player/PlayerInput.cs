@@ -99,15 +99,18 @@ public class PlayerInput : MonoBehaviour
     }
 
     public void SetCursorLock() => _cursorLock = false;
+    public void ToggleCursorLock(bool isPause) => _cursorLock = !isPause;
     private void OnEnable()
     {
         GameManager.Instance.OnGameOver.AddListener(SetCursorLock);
         GameManager.Instance.OnEscape.AddListener(SetCursorLock);
+        GameManager.Instance.OnPause.AddListener(ToggleCursorLock);
     }
 
     private void OnDisable()
     {
         GameManager.Instance.OnGameOver.RemoveListener(SetCursorLock);
         GameManager.Instance.OnEscape.RemoveListener(SetCursorLock);
+        GameManager.Instance.OnPause.RemoveListener(ToggleCursorLock);
     }
 }

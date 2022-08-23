@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class EscapeUI : MonoBehaviour
+public class MenuUI : MonoBehaviour
 {
     private GameObject[] _childs;
-    private GameObject _noticePortalTxt;
     private Button _restartBtn;
     private Button _titleBtn;
     private void Awake()
@@ -17,11 +16,6 @@ public class EscapeUI : MonoBehaviour
         {
             _childs[i] = transform.GetChild(i).gameObject;
             _childs[i].SetActive(false);
-
-            if (_childs[i].name == "NoticeText")
-            {
-                _noticePortalTxt = _childs[i];
-            }
         }
 
         _restartBtn = transform.Find("RestartButton").GetComponent<Button>();
@@ -33,29 +27,32 @@ public class EscapeUI : MonoBehaviour
 
     public void Restart() => GameManager.Instance.Restart();
     public void LoadTitle() => GameManager.Instance.LoadTitle();
-    public void Activate()
+
+    public void Toggle(bool isPause)
     {
         for (int i = 0; i < transform.childCount; i++)
         {
-            _childs[i].SetActive(true);
+            _childs[i].SetActive(isPause);
         }
-    }
 
-    public void NoticePortal()
-    {
-        _noticePortalTxt.SetActive(true);
+        if (isPause)
+        {
+            Time.timeScale = 0;
+        }
+        else
+        {
+            Time.timeScale = 1;
+        }
     }
 
     private void OnEnable()
     {
-        GameManager.Instance.OnEscape.AddListener(Activate);
-        GameManager.Instance.AllKeysCollected.AddListener(NoticePortal);
+        GameManager.Instance.OnPause.AddListener(Toggle);
     }
 
     private void OnDisable()
     {
-        GameManager.Instance.OnEscape.RemoveListener(Activate);
-        GameManager.Instance.AllKeysCollected.RemoveListener(NoticePortal);
+        GameManager.Instance.OnPause.RemoveListener(Toggle);
         _restartBtn.onClick.RemoveListener(Restart);
         _titleBtn.onClick.RemoveListener(LoadTitle);
     }

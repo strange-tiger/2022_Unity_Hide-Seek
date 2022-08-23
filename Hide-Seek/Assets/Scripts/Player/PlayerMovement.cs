@@ -50,19 +50,4 @@ public class PlayerMovement : MonoBehaviour
         _rigidbody.MoveRotation(_rigidbody.rotation * deltaRotation);
         // Debug.Log("rotate");
     }
-
-    public IEnumerator Shake()
-    {
-        while(true)
-        {
-
-            yield return new WaitForSeconds(Time.deltaTime);
-        }
-    }
-
-    //private void controlMarker()
-    //{
-    //    Marker.transform.position = new Vector3(this.transform.position.x, Marker.transform.position.y, this.transform.position.z);
-    //    Marker.transform.forward = this.transform.forward;
-    //}
 }
