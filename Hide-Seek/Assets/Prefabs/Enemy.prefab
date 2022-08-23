@@ -1045,7 +1045,7 @@ MonoBehaviour:
   State: 0
   PrevState: 0
   WalkSpeed: 1
-  RunSpeed: 5.5
+  RunSpeed: 7
   IdleTime: 2
   WalkTime: 5
   CatchTime: 5

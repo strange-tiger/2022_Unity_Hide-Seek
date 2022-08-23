@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public GameObject Marker;
-    public float MoveSpeed = 5f;
+    public float MoveSpeed = 7f;
     public float RotateXAxisSpeed = 30f;
     public float RotateYAxisSpeed = 300f;
     public float XAngleLimit = 60f;

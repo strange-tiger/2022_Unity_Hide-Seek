@@ -26,7 +26,7 @@ public class EnemyAI : Detectable
     public EnemyState State;
     public EnemyState PrevState = EnemyState.None;
     public float WalkSpeed = 1f;
-    public float RunSpeed = 5.5f;
+    public float RunSpeed = 7f;
     public float IdleTime = 2f;
     public float WalkTime = 5f;
     public float CatchTime = 5f;
