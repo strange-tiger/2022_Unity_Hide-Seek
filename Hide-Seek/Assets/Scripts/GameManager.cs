@@ -21,6 +21,7 @@ public class GameManager : SingletonBehaviour<GameManager>
             OnKeyChanged?.Invoke(_currentKey);
         }
     }
+    public UnityEvent AllKeysCollected = new UnityEvent();
     public UnityEvent<int> OnHealthChanged = new UnityEvent<int>();
     public int HealthCount
     {
@@ -67,6 +68,10 @@ public class GameManager : SingletonBehaviour<GameManager>
     public void AddKey()
     {
         ++CurrentKey;
+        if(CurrentKey == KeyCountMax)
+        {
+            AllKeysCollected?.Invoke();
+        }
     }
 
     public void SubHealth()

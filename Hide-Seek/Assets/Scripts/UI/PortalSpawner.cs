@@ -21,13 +21,8 @@ public class PortalSpawner : MonoBehaviour
         _floatHeight = _portal.transform.position.y;
     }
 
-    public void OpenPortal(int key)
+    public void OpenPortal()
     {
-        if (key < _keyCountMax)
-        {
-            return;
-        }
-
         int x;
         int y;
         Vector3 positionCandidate;
@@ -47,11 +42,11 @@ public class PortalSpawner : MonoBehaviour
 
     private void OnEnable()
     {
-        GameManager.Instance.OnKeyChanged.AddListener(OpenPortal);
+        GameManager.Instance.AllKeysCollected.AddListener(OpenPortal);
     }
 
     private void OnDisable()
     {
-        GameManager.Instance.OnKeyChanged.RemoveListener(OpenPortal);
+        GameManager.Instance.AllKeysCollected.RemoveListener(OpenPortal);
     }
 }
