@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class EscapeUI : GameOverUI
 {
+    private GameObject _noticeGoalTxt;
     private GameObject _noticePortalTxt;
     private new void Awake()
     {
@@ -12,22 +13,29 @@ public class EscapeUI : GameOverUI
 
         for (int i = 0; i < transform.childCount; i++)
         {
+            if (_childs[i].name == "GoalText")
+            {
+                _noticeGoalTxt = _childs[i];
+            }
             if (_childs[i].name == "NoticeText")
             {
                 _noticePortalTxt = _childs[i];
             }
         }
+        _noticeGoalTxt?.SetActive(true);
     }
 
     public new void Activate()
     {
         base.Activate();
-        _noticePortalTxt.SetActive(false);
+        _noticeGoalTxt?.SetActive(false);
+        _noticePortalTxt?.SetActive(false);
     }
 
     public void NoticePortal()
     {
-        _noticePortalTxt.SetActive(true);
+        _noticeGoalTxt?.SetActive(false);
+        _noticePortalTxt?.SetActive(true);
     }
 
     private void OnEnable()
