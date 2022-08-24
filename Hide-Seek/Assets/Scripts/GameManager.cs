@@ -79,6 +79,24 @@ public class GameManager : SingletonBehaviour<GameManager>
         }
     }
 
+    public void start()
+    {
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+        {
+            reset();
+            SceneManager.LoadScene(1);
+        }
+    }
+
+    public void Quit()
+    {
+        if (_isGameOver || _isEscape || IsPause || SceneManager.GetActiveScene().buildIndex == 0)
+        {
+            Debug.Log("Quit");
+            Application.Quit();
+        }
+    }
+
     public void Restart()
     {
         if (_isGameOver || _isEscape || IsPause)

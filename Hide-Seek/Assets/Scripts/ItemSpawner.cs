@@ -103,15 +103,6 @@ public class ItemSpawner : MonoBehaviour
                     continue;
                 }
 
-                //if((transform.position - _navMeshAgent.destination).magnitude < 1f)
-                ////if(!_navMeshAgent.hasPath)
-                //{
-                //    --i;
-                //    Debug.Log("Recall");
-                //    continue;
-                //}
-                //_navMeshAgent.SetDestination(transform.position);
-
                 _positions[j][i] = positionCandidate;
             }
         }

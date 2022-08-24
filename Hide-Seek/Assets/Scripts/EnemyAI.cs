@@ -227,7 +227,7 @@ public class EnemyAI : Detectable
     private int _targetCandidateCount;
     private bool FindTarget()
     {
-        _targetCandidateCount = Physics.OverlapSphereNonAlloc(transform.position, 20f, _targetCandidates, TargetLayer);
+        _targetCandidateCount = Physics.OverlapSphereNonAlloc(transform.position, 10f, _targetCandidates, TargetLayer);
 
         for (int i = 0; i < _targetCandidateCount; ++i)
         {
@@ -251,7 +251,7 @@ public class EnemyAI : Detectable
 
     public void TargetCatched()
     {
-        Debug.Log("Catch");
+        //Debug.Log("Catch");
         ChangeState(EnemyState.Catch);
     }
 
@@ -278,13 +278,4 @@ public class EnemyAI : Detectable
     {
         base.OnTriggerExit(other);
     }
-
-    //private void controlMarker()
-    //{
-    //    if (_marker != null)
-    //    {
-    //        _marker.transform.position = new Vector3(this.transform.position.x, _marker.transform.position.y, this.transform.position.z);
-    //        _marker.transform.forward = this.transform.forward;
-    //    }
-    //}
 }

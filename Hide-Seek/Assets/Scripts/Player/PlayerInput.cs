@@ -112,5 +112,7 @@ public class PlayerInput : MonoBehaviour
         GameManager.Instance.OnGameOver.RemoveListener(SetCursorLock);
         GameManager.Instance.OnEscape.RemoveListener(SetCursorLock);
         GameManager.Instance.OnPause.RemoveListener(ToggleCursorLock);
+        SetCursorLock();
+        LockCursor();
     }
 }

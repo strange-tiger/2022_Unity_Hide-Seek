@@ -33,21 +33,16 @@ public class PlayerMovement : MonoBehaviour
         _rigidbody.MovePosition(_rigidbody.position + deltaPosition);
     }
 
-    // private float rotationXAmount = 0f;
     private float rotationYAmount = 0f;
     private float rotationX = 0f;
     private void rotate()
     {
         _input.UpdateRotate();
-        //rotationXAmount = RotateXAxisSpeed * _input.RotateX;
         rotationYAmount = RotateYAxisSpeed * _input.RotateY * Time.deltaTime;
 
-        //rotationX = Mathf.Clamp(rotationX + rotationXAmount, -XAngleLimit, XAngleLimit);
-        //float rotationY = transform.eulerAngles.y + rotationYAmount;
         float rotationY = rotationYAmount;
         Quaternion deltaRotation = Quaternion.Euler(rotationX, rotationY, 0f);
 
         _rigidbody.MoveRotation(_rigidbody.rotation * deltaRotation);
-        // Debug.Log("rotate");
     }
 }

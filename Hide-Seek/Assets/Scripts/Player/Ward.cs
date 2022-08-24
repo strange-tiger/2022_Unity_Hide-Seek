@@ -46,7 +46,7 @@ public class Ward : Sight
         transform.localScale = 0.01f * Vector3.one;
 
         int coefficient = (int)(Duration / Cooltime);
-        Debug.Log(coefficient);
+        
         while (CurrentGauge < Cooltime * coefficient)
         {
             yield return new WaitForSeconds(Time.deltaTime);
