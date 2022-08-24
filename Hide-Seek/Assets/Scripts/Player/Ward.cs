@@ -32,12 +32,15 @@ public class Ward : Sight
 
     private void OnEnable()
     {
-        transform.localScale = SightSize * Vector3.one;
-        StartCoroutine(Hold());
+        marker.SetActive(input.IsFullMap);
+        StartCoroutine(Sight());
     }
 
-    public IEnumerator Hold()
+    public IEnumerator Sight()
     {
+        transform.localScale = 0.01f * Vector3.one;
+        yield return new WaitForSeconds(0.1f);
+        transform.localScale = SightSize * Vector3.one;
         while (CurrentGauge > 0f)
         {
             yield return new WaitForSeconds(Time.deltaTime);

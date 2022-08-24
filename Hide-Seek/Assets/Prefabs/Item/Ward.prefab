@@ -13,13 +13,14 @@ GameObject:
   - component: {fileID: 5880835152506327276}
   - component: {fileID: 5880835152506327267}
   - component: {fileID: 6820087430356964773}
+  - component: {fileID: 4684009997682673503}
   m_Layer: 0
   m_Name: Ward
   m_TagString: Ward
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5880835152506327278
 Transform:
   m_ObjectHideFlags: 0
@@ -117,8 +118,23 @@ MonoBehaviour:
   SightSize: 0.5
   Duration: 10
   Cooltime: 5
-  CurrentGauge: 10
   RotationSpeed: 60
+--- !u!54 &4684009997682673503
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5880835152506327266}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 14
+  m_CollisionDetection: 0
 --- !u!1001 &5880835151521083321
 PrefabInstance:
   m_ObjectHideFlags: 0
