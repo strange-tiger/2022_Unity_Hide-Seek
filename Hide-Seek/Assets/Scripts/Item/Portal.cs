@@ -20,6 +20,12 @@ public class Portal : Item
             GameManager.Instance.Escape();
         }
     }
+
+    private new void Update()
+    {
+        base.Update();
+    }
+
     private new void OnTriggerExit(Collider other)
     {
         base.OnTriggerExit(other);
