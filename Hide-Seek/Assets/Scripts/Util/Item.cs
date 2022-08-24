@@ -8,6 +8,6 @@ public class Item : Detectable
 
     protected void Update()
     {
-        transform.Rotate(0f, rotationSpeed * Time.deltaTime, 0f);
+        transform.Rotate(0f, rotationSpeed * Time.deltaTime, 0f, Space.World);
     }
 }

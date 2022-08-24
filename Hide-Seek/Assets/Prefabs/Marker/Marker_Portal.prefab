@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8892227542004317600}
   - component: {fileID: 4338466176038898433}
   - component: {fileID: 8878455741753446158}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Marker_Portal_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}

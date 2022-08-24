@@ -25,8 +25,9 @@ public class EnemyAI : Detectable
     public LayerMask TargetLayer;
     public EnemyState State;
     public EnemyState PrevState = EnemyState.None;
+    public Vector3 InitPosition = Vector3.zero;
     public float WalkSpeed = 1f;
-    public float RunSpeed = 5.5f;
+    public float RunSpeed = 5f;
     public float IdleTime = 2f;
     public float WalkTime = 5f;
     public float CatchTime = 5f;
@@ -62,6 +63,11 @@ public class EnemyAI : Detectable
         // _renderer = GetComponent<Renderer>();
 
         base.Awake();
+
+        if(InitPosition == Vector3.zero)
+        {
+            InitPosition = transform.position;
+        }
 
         ChangeState(EnemyState.Idle);
     }
@@ -202,16 +208,26 @@ public class EnemyAI : Detectable
         while (true)
         {
             yield return new WaitForSeconds(CatchTime);
-
+            
+            backToPosition();
             ChangeState(EnemyState.Idle);
         }
+    }
+
+    private void backToPosition()
+    {
+        if (_targetGameOver)
+        {
+            return;
+        }
+        transform.position = InitPosition;
     }
 
     private Collider[] _targetCandidates = new Collider[5];
     private int _targetCandidateCount;
     private bool FindTarget()
     {
-        _targetCandidateCount = Physics.OverlapSphereNonAlloc(transform.position, 20f, _targetCandidates, TargetLayer);
+        _targetCandidateCount = Physics.OverlapSphereNonAlloc(transform.position, 10f, _targetCandidates, TargetLayer);
 
         for (int i = 0; i < _targetCandidateCount; ++i)
         {
@@ -235,7 +251,7 @@ public class EnemyAI : Detectable
 
     public void TargetCatched()
     {
-        Debug.Log("Catch");
+        //Debug.Log("Catch");
         ChangeState(EnemyState.Catch);
     }
 
@@ -262,13 +278,4 @@ public class EnemyAI : Detectable
     {
         base.OnTriggerExit(other);
     }
-
-    //private void controlMarker()
-    //{
-    //    if (_marker != null)
-    //    {
-    //        _marker.transform.position = new Vector3(this.transform.position.x, _marker.transform.position.y, this.transform.position.z);
-    //        _marker.transform.forward = this.transform.forward;
-    //    }
-    //}
 }

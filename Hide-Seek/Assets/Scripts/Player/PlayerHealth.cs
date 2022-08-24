@@ -5,7 +5,6 @@ using UnityEngine;
 public class PlayerHealth : MonoBehaviour
 {
     public event Action OnDeath;
-    public bool IsDead { get; private set; }
     public float DeathSightHeight = 0.3f;
 
     private PlayerMovement _movement;
@@ -14,7 +13,6 @@ public class PlayerHealth : MonoBehaviour
     private bool _revivable;
     private void Awake()
     {
-        IsDead = false;
         _revivable = true;
         _movement = GetComponent<PlayerMovement>();
         _setWard = GetComponent<PlayerSetWard>();
@@ -23,10 +21,10 @@ public class PlayerHealth : MonoBehaviour
 
     public void Die()
     {
-        Revive();
+        GameManager.Instance.SubHealth();
         GameManager.Instance.End();
+        Revive();
         OnDeath?.Invoke();
-        IsDead = true;
 
         // gameObject.SetActive(false);
         _movement.enabled = false;
@@ -49,22 +47,28 @@ public class PlayerHealth : MonoBehaviour
 
         transform.position = _playerInitialPosition;
         transform.rotation = Quaternion.identity;
-
-        GameManager.Instance.SubHealth();
     }
 
     public void SetRevivable() => _revivable = false;
+    public void SetMovable(bool isPause)
+    {
+        _movement.enabled = !isPause;
+        _setWard.enabled= !isPause;
+    }
     private void OnEnable()
     {
         _movement.enabled = true;
         _setWard.enabled = true;
         GameManager.Instance.OnGameOver.AddListener(SetRevivable);
+        GameManager.Instance.OnPause.AddListener(SetMovable);
     }
 
     private void OnDisable()
     {
         GameManager.Instance.OnGameOver.RemoveListener(SetRevivable);
+        GameManager.Instance.OnPause.RemoveListener(SetMovable);
     }
+
 
     private void OnCollisionEnter(Collision collision)
     {

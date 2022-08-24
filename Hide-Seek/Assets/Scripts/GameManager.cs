@@ -21,6 +21,7 @@ public class GameManager : SingletonBehaviour<GameManager>
             OnKeyChanged?.Invoke(_currentKey);
         }
     }
+    public UnityEvent AllKeysCollected = new UnityEvent();
     public UnityEvent<int> OnHealthChanged = new UnityEvent<int>();
     public int HealthCount
     {
@@ -34,6 +35,19 @@ public class GameManager : SingletonBehaviour<GameManager>
             OnHealthChanged?.Invoke(_healthCount);
         }
     }
+    public UnityEvent<bool> OnPause = new UnityEvent<bool>();
+    public bool IsPause
+    {
+        get
+        {
+            return _isPause;
+        }
+        set
+        {
+            _isPause = value;
+            OnPause?.Invoke(_isPause);
+        }
+    }
 
     public int KeyCountMax = 10;
     public int InitHealthCount = 3;
@@ -41,6 +55,8 @@ public class GameManager : SingletonBehaviour<GameManager>
     private int _healthCount;
     private int _currentKey = 0;
     private bool _isGameOver = false;
+    private bool _isEscape = false;
+    private bool _isPause = false;
     private void Start()    
     {
         reset();
@@ -51,11 +67,48 @@ public class GameManager : SingletonBehaviour<GameManager>
         CurrentKey = 0;
         HealthCount = InitHealthCount;
         _isGameOver = false;
+        _isEscape = false;
+        IsPause = false;
+    }
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            IsPause = !IsPause;
+        }
+    }
+
+    public void start()
+    {
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+        {
+            reset();
+            SceneManager.LoadScene(1);
+        }
+    }
+
+    public void Quit()
+    {
+        if (_isGameOver || _isEscape || IsPause || SceneManager.GetActiveScene().buildIndex == 0)
+        {
+            Debug.Log("Quit");
+            Application.Quit();
+        }
     }
 
     public void Restart()
     {
-        if (_isGameOver)
+        if (_isGameOver || _isEscape || IsPause)
+        {
+            reset();
+            SceneManager.LoadScene(1);
+        }
+    }
+
+    public void LoadTitle()
+    {
+        if (_isGameOver || _isEscape || IsPause)
         {
             reset();
             SceneManager.LoadScene(0);
@@ -65,6 +118,10 @@ public class GameManager : SingletonBehaviour<GameManager>
     public void AddKey()
     {
         ++CurrentKey;
+        if(CurrentKey == KeyCountMax)
+        {
+            AllKeysCollected?.Invoke();
+        }
     }
 
     public void SubHealth()
@@ -74,7 +131,7 @@ public class GameManager : SingletonBehaviour<GameManager>
 
     public void End()
     {
-        if (HealthCount == 0)
+        if (HealthCount <= 0)
         {
             _isGameOver = true;
             OnGameOver?.Invoke();
@@ -83,6 +140,7 @@ public class GameManager : SingletonBehaviour<GameManager>
 
     public void Escape()
     {
+        _isEscape = true;
         OnEscape?.Invoke();
     }
 }

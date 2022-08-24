@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public GameObject Marker;
-    public float MoveSpeed = 5f;
+    public float MoveSpeed = 7f;
     public float RotateXAxisSpeed = 30f;
     public float RotateYAxisSpeed = 300f;
     public float XAngleLimit = 60f;
@@ -19,42 +19,30 @@ public class PlayerMovement : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody>();
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         move();
         rotate();
-        //controlMarker();
     }
 
     private void move()
     {
         _input.UpdateMove();
-        Vector3 deltaPosition = MoveSpeed * Time.fixedDeltaTime * (_input.MoveFront * transform.forward + _input.MoveRight * transform.right);
+        Vector3 deltaPosition = MoveSpeed * Time.deltaTime * (_input.MoveFront * transform.forward + _input.MoveRight * transform.right);
 
         _rigidbody.MovePosition(_rigidbody.position + deltaPosition);
     }
 
-    // private float rotationXAmount = 0f;
     private float rotationYAmount = 0f;
     private float rotationX = 0f;
     private void rotate()
     {
         _input.UpdateRotate();
-        //rotationXAmount = RotateXAxisSpeed * _input.RotateX;
-        rotationYAmount = RotateYAxisSpeed * _input.RotateY * Time.fixedDeltaTime;
+        rotationYAmount = RotateYAxisSpeed * _input.RotateY * Time.deltaTime;
 
-        //rotationX = Mathf.Clamp(rotationX + rotationXAmount, -XAngleLimit, XAngleLimit);
-        //float rotationY = transform.eulerAngles.y + rotationYAmount;
         float rotationY = rotationYAmount;
         Quaternion deltaRotation = Quaternion.Euler(rotationX, rotationY, 0f);
 
         _rigidbody.MoveRotation(_rigidbody.rotation * deltaRotation);
-        // Debug.Log("rotate");
     }
-
-    //private void controlMarker()
-    //{
-    //    Marker.transform.position = new Vector3(this.transform.position.x, Marker.transform.position.y, this.transform.position.z);
-    //    Marker.transform.forward = this.transform.forward;
-    //}
 }
