@@ -16,6 +16,8 @@ public class PlayerInput : MonoBehaviour
 
     public float RotateX { get; private set; }
     public float RotateY { get; private set; }
+    
+    public bool IsShake { get; private set; }
 
     public event Action<bool> OnFullMap;
     public bool IsFullMap { get; private set; }
@@ -31,6 +33,7 @@ public class PlayerInput : MonoBehaviour
         RotateX = 0f;
         RotateY = 0f;
         IsFullMap = false;
+        IsShake = false;
         _cursorLock = true;
 
         _health = GetComponent<PlayerHealth>();
@@ -45,6 +48,7 @@ public class PlayerInput : MonoBehaviour
         RotateX = 0f;
         RotateY = 0f;
         IsFullMap = false;
+        IsShake = false;
     }
 
     private void Update()
@@ -58,12 +62,25 @@ public class PlayerInput : MonoBehaviour
     {
         MoveFront = Input.GetAxis(MoveFrontAxisName);
         MoveRight = Input.GetAxis(MoveRightAxisName);
+        UpdateShake();
     }
 
     public void UpdateRotate()
     {
         //RotateX = -Input.GetAxis(RotateXAxisName);
         RotateY = Input.GetAxis(RotateYAxisName);
+    }
+
+    public void UpdateShake()
+    {
+        if (MoveFront > 0.05f || MoveFront < -0.05f || MoveRight > 0.05f || MoveRight < -0.05f)
+        {
+            IsShake = true;
+        }
+        else
+        {
+            IsShake = false;
+        }
     }
 
     public void UpdateFullMapToggle()
