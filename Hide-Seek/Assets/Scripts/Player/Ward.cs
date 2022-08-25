@@ -5,9 +5,7 @@ using UnityEngine;
 
 public class Ward : Sight
 {
-    public float SightSize = 0.5f;
     public float Duration = 10f;
-    public float Cooltime = 5f;
     public event Action<float> GaugeChanged;
     public float CurrentGauge
     {
@@ -21,8 +19,12 @@ public class Ward : Sight
             GaugeChanged?.Invoke(_currentGauge);
         }
     }
-
     private float _currentGauge;
+
+    [SerializeField]
+    private float _SightSize = 0.5f;
+    [SerializeField]
+    private float _Cooltime = 5f;
     private new void Awake()
     {
         base.Awake();
@@ -40,7 +42,7 @@ public class Ward : Sight
     {
         transform.localScale = 0.01f * Vector3.one;
         yield return new WaitForSeconds(0.1f);
-        transform.localScale = SightSize * Vector3.one;
+        transform.localScale = _SightSize * Vector3.one;
         while (CurrentGauge > 0f)
         {
             yield return new WaitForSeconds(Time.deltaTime);
@@ -48,12 +50,12 @@ public class Ward : Sight
         }
         transform.localScale = 0.01f * Vector3.one;
 
-        int coefficient = (int)(Duration / Cooltime);
+        int coefficient = (int)(Duration / _Cooltime);
         
-        while (CurrentGauge < Cooltime * coefficient)
+        while (CurrentGauge < _Cooltime * coefficient)
         {
             yield return new WaitForSeconds(Time.deltaTime);
-            CurrentGauge += Time.deltaTime * Duration / Cooltime;
+            CurrentGauge += Time.deltaTime * Duration / _Cooltime;
         }
         CurrentGauge = Duration;
         gameObject.SetActive(false);

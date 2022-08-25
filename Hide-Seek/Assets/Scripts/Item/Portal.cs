@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Portal : Item
 {
-    public float GetPortalDist = 2f;
+    [SerializeField]
+    private float _GetPortalDist = 2f;
     private new void OnTriggerStay(Collider other)
     {
         base.OnTriggerStay(other);
@@ -15,7 +16,7 @@ public class Portal : Item
         }
 
         Vector3 distance = other.transform.position - transform.position;
-        if (distance.sqrMagnitude < GetPortalDist)
+        if (distance.sqrMagnitude < _GetPortalDist)
         {
             GameManager.Instance.Escape();
         }

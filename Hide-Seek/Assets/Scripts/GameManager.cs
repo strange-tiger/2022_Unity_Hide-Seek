@@ -90,28 +90,71 @@ public class GameManager : SingletonBehaviour<GameManager>
 
     public void Quit()
     {
-        if (_isGameOver || _isEscape || IsPause || SceneManager.GetActiveScene().buildIndex == 0)
+        Debug.Log("Quit");
+
+        if (_isGameOver)
         {
-            Debug.Log("Quit");
             Application.Quit();
+            return;
+        }
+        if (_isEscape)
+        {
+            Application.Quit();
+            return;
+        }
+        if (IsPause)
+        {
+            Application.Quit();
+            return;
+        }
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+        {
+            Application.Quit();
+            return;
         }
     }
 
     public void Restart()
     {
-        if (_isGameOver || _isEscape || IsPause)
+        if (_isGameOver)
         {
             reset();
             SceneManager.LoadScene(1);
+            return;
+        }
+        if (_isEscape)
+        {
+            reset();
+            SceneManager.LoadScene(1);
+            return;
+        }
+        if (IsPause)
+        {
+            reset();
+            SceneManager.LoadScene(1);
+            return;
         }
     }
 
     public void LoadTitle()
     {
-        if (_isGameOver || _isEscape || IsPause)
+        if (_isGameOver)
         {
             reset();
             SceneManager.LoadScene(0);
+            return;
+        }
+        if (_isEscape)
+        {
+            reset();
+            SceneManager.LoadScene(0);
+            return;
+        }
+        if (IsPause)
+        {
+            reset();
+            SceneManager.LoadScene(0);
+            return;
         }
     }
 

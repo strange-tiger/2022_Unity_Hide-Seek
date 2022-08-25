@@ -13,15 +13,18 @@ public enum ItemIndex
 public class ItemSpawner : MonoBehaviour
 {
     public GameObject[] ItemKinds;
-    public int[] ItemCount;
-    public int PositionRange;
-    public float FloatHeight = 0.5f;
 
     private NavMeshAgent _navMeshAgent;
     private GameObject[][] _items;
     private Vector3[][] _positions;
     private bool[,] _positionUsedArr; 
 
+    [SerializeField]
+    private int[] _ItemCount;
+    [SerializeField]
+    private int _PositionRange;
+    [SerializeField]
+    private float _FloatHeight = 0.5f;
     private void Awake()
     {
         _navMeshAgent = GetComponent<NavMeshAgent>();
@@ -29,7 +32,7 @@ public class ItemSpawner : MonoBehaviour
 
         if (ItemKinds[(int)ItemIndex.Key] != null)
         {
-            ItemCount[(int)ItemIndex.Key] = GameManager.Instance.KeyCountMax;
+            _ItemCount[(int)ItemIndex.Key] = GameManager.Instance.KeyCountMax;
         }
 
         generateItems();
@@ -38,7 +41,7 @@ public class ItemSpawner : MonoBehaviour
     private void generateItems()
     {
         Debug.Assert(ItemKinds.Length == (int)ItemIndex.Max);
-        Debug.Assert(ItemKinds.Length == ItemCount.Length);
+        Debug.Assert(ItemKinds.Length == _ItemCount.Length);
         int itemKind = (int)ItemIndex.Max;
         
         setItemPositionArr(itemKind);
@@ -46,10 +49,10 @@ public class ItemSpawner : MonoBehaviour
         _items = new GameObject[itemKind][];
         for (int j = 0; j < itemKind; ++j)
         {
-            _items[j] = new GameObject[ItemCount[j]];
+            _items[j] = new GameObject[_ItemCount[j]];
             //Debug.Log(ItemCount[j]);
             //Debug.Log(ItemKinds[j] != null);
-            for (int i = 0; i < ItemCount[j]; ++i)
+            for (int i = 0; i < _ItemCount[j]; ++i)
             {
                 _items[j][i] = Instantiate(ItemKinds[j], transform.position + _positions[j][i], Quaternion.identity);
                 
@@ -61,10 +64,10 @@ public class ItemSpawner : MonoBehaviour
 
     private void setItemPositionArr(int ItemKind)
     {
-        _positionUsedArr = new bool[PositionRange, PositionRange];
-        for (int j = 0; j < PositionRange; ++j)
+        _positionUsedArr = new bool[_PositionRange, _PositionRange];
+        for (int j = 0; j < _PositionRange; ++j)
         {
-            for (int i = 0; i < PositionRange; ++i)
+            for (int i = 0; i < _PositionRange; ++i)
             {
                 _positionUsedArr[j, i] = false;
             }
@@ -73,20 +76,20 @@ public class ItemSpawner : MonoBehaviour
         _positions = new Vector3[ItemKind][];
         for (int j = 0; j < ItemKind; ++j)
         {
-            _positions[j] = new Vector3[ItemCount[j]];
+            _positions[j] = new Vector3[_ItemCount[j]];
 
             int x;
             int y;
             Vector3 positionCandidate;
-            for (int i = 0; i < ItemCount[j]; ++i)
+            for (int i = 0; i < _ItemCount[j]; ++i)
             {
-                x = Random.Range(2, PositionRange - 1);
-                y = Random.Range(2, PositionRange - 1);
+                x = Random.Range(2, _PositionRange - 1);
+                y = Random.Range(2, _PositionRange - 1);
 
                 //count++;
                 //Debug.Assert(count < 50);
 
-                positionCandidate = new Vector3(x, FloatHeight, y);
+                positionCandidate = new Vector3(x, _FloatHeight, y);
                 if (_positionUsedArr[y, x] == true)
                 {
                     --i;
@@ -108,18 +111,19 @@ public class ItemSpawner : MonoBehaviour
         }
     }
 
-    public int UsedArea = 10;
+    [SerializeField]
+    private int _UsedArea = 10;
     private void markUsedArea(int y, int x)
     {
-        for (int j = -UsedArea; j <= UsedArea; ++j)
+        for (int j = -_UsedArea; j <= _UsedArea; ++j)
         {
-            for (int i = -UsedArea; i <= UsedArea; ++i)
+            for (int i = -_UsedArea; i <= _UsedArea; ++i)
             {
-                if (y + j <= 2 || y + j >= PositionRange - 1)
+                if (y + j <= 2 || y + j >= _PositionRange - 1)
                 {
                     continue;
                 }
-                if (x + i <= 2 || x + i >= PositionRange - 1)
+                if (x + i <= 2 || x + i >= _PositionRange - 1)
                 {
                     continue;
                 }

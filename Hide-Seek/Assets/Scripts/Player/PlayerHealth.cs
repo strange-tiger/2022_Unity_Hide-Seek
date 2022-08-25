@@ -5,12 +5,13 @@ using UnityEngine;
 public class PlayerHealth : MonoBehaviour
 {
     public event Action OnDeath;
-    public float DeathSightHeight = 0.3f;
 
     private PlayerMovement _movement;
     private PlayerSetWard _setWard;
     private Vector3 _playerInitialPosition;
     private bool _revivable;
+    [SerializeField]
+    private float _DeathSightHeight = 0.3f;
     private void Awake()
     {
         _revivable = true;
@@ -74,7 +75,7 @@ public class PlayerHealth : MonoBehaviour
     {
         if (collision.gameObject.tag == "Enemy")
         {
-            transform.LookAt(collision.transform.position + DeathSightHeight * Vector3.up);
+            transform.LookAt(collision.transform.position + _DeathSightHeight * Vector3.up);
             // Debug.Log("Ouch");
 
             Die();

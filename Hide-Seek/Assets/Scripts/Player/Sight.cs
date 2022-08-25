@@ -5,9 +5,10 @@ using UnityEngine;
 public class Sight : MonoBehaviour
 {
     public PlayerInput input;
-    public string markerName = "Marker_S";
 
     protected GameObject marker;
+    [SerializeField]
+    protected string markerName = "Marker_S";
     protected void Awake()
     {
         for (int i = 0; i < transform.childCount; ++i)

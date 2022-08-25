@@ -29,8 +29,10 @@ public class HealthCountUI : MonoBehaviour
         StartCoroutine(ChangeSize());
     }
 
-    public float BigSize = 3f;
-    public float MoveDownLength = 200f;
+    [SerializeField]
+    private float _BigSize = 3f;
+    [SerializeField]
+    private float _MoveDownLength = 200f;
     public IEnumerator ChangeSize()
     {
         float changeBiggerTime = 1f;
@@ -41,8 +43,8 @@ public class HealthCountUI : MonoBehaviour
         Vector3 initPosition = _ui.transform.localPosition;
         while (changeBiggerTime > 0f)
         {
-            _ui.transform.localScale += BigSize * deltaTime * Vector3.one;
-            _ui.transform.localPosition -= new Vector3(0f, MoveDownLength * deltaTime);
+            _ui.transform.localScale += _BigSize * deltaTime * Vector3.one;
+            _ui.transform.localPosition -= new Vector3(0f, _MoveDownLength * deltaTime);
 
             changeBiggerTime -= deltaTime;
             yield return new WaitForSeconds(deltaTime);
@@ -52,8 +54,8 @@ public class HealthCountUI : MonoBehaviour
 
         while (changeSmallerTime > 0f)
         {
-            _ui.transform.localScale -= BigSize * deltaTime * Vector3.one;
-            _ui.transform.localPosition += new Vector3(0f, MoveDownLength * deltaTime);
+            _ui.transform.localScale -= _BigSize * deltaTime * Vector3.one;
+            _ui.transform.localPosition += new Vector3(0f, _MoveDownLength * deltaTime);
 
             changeSmallerTime -= deltaTime;
             yield return new WaitForSeconds(deltaTime);

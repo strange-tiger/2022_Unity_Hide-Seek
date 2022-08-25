@@ -52,7 +52,7 @@ MonoBehaviour:
     m_Bits: 128
   marker: {fileID: 0}
   rotationSpeed: 60
-  GetItemDist: 2
+  GetItemDist: 5
 --- !u!135 &9097515266829843464
 SphereCollider:
   m_ObjectHideFlags: 0

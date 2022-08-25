@@ -22,15 +22,24 @@ public static class EnemyAnimID
 
 public class EnemyAI : Detectable
 {
-    public LayerMask TargetLayer;
-    public EnemyState State;
-    public EnemyState PrevState = EnemyState.None;
-    public Vector3 InitPosition = Vector3.zero;
-    public float WalkSpeed = 1f;
-    public float RunSpeed = 5f;
-    public float IdleTime = 2f;
-    public float WalkTime = 5f;
-    public float CatchTime = 5f;
+    [SerializeField]
+    private LayerMask _TargetLayer;
+    [SerializeField]
+    private EnemyState _State;
+    [SerializeField]
+    private EnemyState _PrevState = EnemyState.None;
+    [SerializeField]
+    private Vector3 _InitPosition = Vector3.zero;
+    [SerializeField]
+    private float _WalkSpeed = 1f;
+    [SerializeField]
+    private float _RunSpeed = 5f;
+    [SerializeField]
+    private float _IdleTime = 2f;
+    [SerializeField]
+    private float _WalkTime = 5f;
+    [SerializeField]
+    private float _CatchTime = 5f;
 
     private Transform _target;
     private NavMeshAgent _navMeshAgent;
@@ -64,9 +73,9 @@ public class EnemyAI : Detectable
 
         base.Awake();
 
-        if(InitPosition == Vector3.zero)
+        if(_InitPosition == Vector3.zero)
         {
-            InitPosition = transform.position;
+            _InitPosition = transform.position;
         }
 
         ChangeState(EnemyState.Idle);
@@ -74,12 +83,12 @@ public class EnemyAI : Detectable
        
     private void Start()
     {
-        _navMeshAgent.speed = WalkSpeed;
+        _navMeshAgent.speed = _WalkSpeed;
     }
 
     private void Update()
     {
-        switch (State)
+        switch (_State)
         {
             case EnemyState.Idle: UpdateIdle(); break;
             case EnemyState.Walk: UpdateWalk(); break;
@@ -127,7 +136,7 @@ public class EnemyAI : Detectable
     }
     void UpdateCatch()
     {
-        
+        transform.LookAt(_target);
     }
 
     private void ChangeState(EnemyState nextState)
@@ -135,15 +144,15 @@ public class EnemyAI : Detectable
         StopAllCoroutines();
         _navMeshAgent.isStopped = true;
 
-        PrevState = State;
-        State = nextState;
+        _PrevState = _State;
+        _State = nextState;
 
         _animator.SetBool(EnemyAnimID.IsIdle, false);
         _animator.SetBool(EnemyAnimID.IsWalk, false);
         _animator.SetBool(EnemyAnimID.IsRun, false);
         _animator.SetBool(EnemyAnimID.IsCatch, false);
 
-        switch (State)
+        switch (_State)
         {
             case EnemyState.Idle: StartCoroutine(CoroutineIdle()); break;
             case EnemyState.Walk: StartCoroutine(CoroutineWalk()); break;
@@ -158,7 +167,7 @@ public class EnemyAI : Detectable
 
         while (true)
         {
-            yield return new WaitForSeconds(IdleTime);
+            yield return new WaitForSeconds(_IdleTime);
             
             ChangeState(EnemyState.Walk);
         }
@@ -167,9 +176,9 @@ public class EnemyAI : Detectable
     {
         _animator.SetBool(EnemyAnimID.IsWalk, true);
 
-        Vector3 destination = (WalkTime * WalkSpeed) * transform.forward + transform.position;
+        Vector3 destination = (_WalkTime * _WalkSpeed) * transform.forward + transform.position;
         
-        _navMeshAgent.speed = WalkSpeed;
+        _navMeshAgent.speed = _WalkSpeed;
         _navMeshAgent.isStopped = false;
         _navMeshAgent.SetDestination(destination);
         
@@ -183,7 +192,7 @@ public class EnemyAI : Detectable
 
         while (true)
         {
-            yield return new WaitForSeconds(WalkTime);
+            yield return new WaitForSeconds(_WalkTime);
 
             ChangeState(EnemyState.Idle);
         }
@@ -195,7 +204,7 @@ public class EnemyAI : Detectable
         while(true)
         {
             _navMeshAgent.isStopped = false;
-            _navMeshAgent.speed = RunSpeed;
+            _navMeshAgent.speed = _RunSpeed;
             _navMeshAgent.SetDestination(_target.position);
             
             yield return new WaitForSeconds(0.1f);
@@ -207,7 +216,7 @@ public class EnemyAI : Detectable
 
         while (true)
         {
-            yield return new WaitForSeconds(CatchTime);
+            yield return new WaitForSeconds(_CatchTime);
             
             backToPosition();
             ChangeState(EnemyState.Idle);
@@ -220,14 +229,14 @@ public class EnemyAI : Detectable
         {
             return;
         }
-        transform.position = InitPosition;
+        transform.position = _InitPosition;
     }
 
     private Collider[] _targetCandidates = new Collider[5];
     private int _targetCandidateCount;
     private bool FindTarget()
     {
-        _targetCandidateCount = Physics.OverlapSphereNonAlloc(transform.position, 10f, _targetCandidates, TargetLayer);
+        _targetCandidateCount = Physics.OverlapSphereNonAlloc(transform.position, 10f, _targetCandidates, _TargetLayer);
 
         for (int i = 0; i < _targetCandidateCount; ++i)
         {

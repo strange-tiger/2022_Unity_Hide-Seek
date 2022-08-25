@@ -5,27 +5,56 @@ using UnityEngine;
 
 public class PlayerInput : MonoBehaviour
 {
-
-    public string MoveFrontAxisName = "Vertical";
-    public string MoveRightAxisName = "Horizontal";
-    public string RotateXAxisName = "Mouse Y";
-    public string RotateYAxisName = "Mouse X";
-
+    
     public float MoveFront { get; private set; }
     public float MoveRight { get; private set; }
 
     public float RotateX { get; private set; }
     public float RotateY { get; private set; }
-    
-    public bool IsShake { get; private set; }
+
+    public event Action<bool> OnMove;
+    public bool IsMoving
+    {
+        get
+        {
+            return _isMoving;
+        }
+        set
+        {
+            _isMoving = value;
+            OnMove?.Invoke(_isMoving);
+        }
+    }
 
     public event Action<bool> OnFullMap;
-    public bool IsFullMap { get; private set; }
+    public bool IsFullMap
+    {
+        get
+        {
+            return _isFullMap;
+        }
+        set
+        {
+            _isFullMap = value;
+            OnFullMap?.Invoke(_isFullMap);
+        }
+    }
 
     public event Action UseWard;
 
     private PlayerHealth _health;
+    private bool _isMoving = false;
+    private bool _isFullMap = false;
     private bool _cursorLock = true;
+
+    [SerializeField]
+    private string _MoveFrontAxisName = "Vertical";
+    [SerializeField]
+    private string _MoveRightAxisName = "Horizontal";
+    [SerializeField]
+    private string _RotateXAxisName = "Mouse Y";
+    [SerializeField]
+    private string _RotateYAxisName = "Mouse X";
     private void Awake()
     {
         MoveFront = 0f;
@@ -33,7 +62,7 @@ public class PlayerInput : MonoBehaviour
         RotateX = 0f;
         RotateY = 0f;
         IsFullMap = false;
-        IsShake = false;
+        IsMoving = false;
         _cursorLock = true;
 
         _health = GetComponent<PlayerHealth>();
@@ -48,7 +77,7 @@ public class PlayerInput : MonoBehaviour
         RotateX = 0f;
         RotateY = 0f;
         IsFullMap = false;
-        IsShake = false;
+        IsMoving = false;
     }
 
     private void Update()
@@ -60,27 +89,35 @@ public class PlayerInput : MonoBehaviour
 
     public void UpdateMove()
     {
-        MoveFront = Input.GetAxis(MoveFrontAxisName);
-        MoveRight = Input.GetAxis(MoveRightAxisName);
+        MoveFront = Input.GetAxis(_MoveFrontAxisName);
+        MoveRight = Input.GetAxis(_MoveRightAxisName);
         UpdateShake();
     }
 
     public void UpdateRotate()
     {
         //RotateX = -Input.GetAxis(RotateXAxisName);
-        RotateY = Input.GetAxis(RotateYAxisName);
+        RotateY = Input.GetAxis(_RotateYAxisName);
     }
 
     public void UpdateShake()
     {
+        bool isMoving;
         if (MoveFront > 0.05f || MoveFront < -0.05f || MoveRight > 0.05f || MoveRight < -0.05f)
         {
-            IsShake = true;
+            isMoving = true;
         }
         else
         {
-            IsShake = false;
+            isMoving = false;
         }
+
+        if (IsMoving == isMoving)
+        {
+            return;
+        }
+        
+        IsMoving = isMoving;
     }
 
     public void UpdateFullMapToggle()
@@ -88,7 +125,6 @@ public class PlayerInput : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.M))
         {
             IsFullMap = !IsFullMap;
-            OnFullMap?.Invoke(IsFullMap);
         }
     }
 
@@ -103,14 +139,13 @@ public class PlayerInput : MonoBehaviour
 
     private void LockCursor()
     {
+        Cursor.visible = !_cursorLock;
         if (_cursorLock)
         {
-            Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
         }
         else
         {
-            Cursor.visible = true;
             Cursor.lockState = CursorLockMode.Confined;
         }
     }
