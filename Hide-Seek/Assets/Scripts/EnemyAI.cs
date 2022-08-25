@@ -33,7 +33,7 @@ public class EnemyAI : Detectable
     [SerializeField]
     private float _WalkSpeed = 1f;
     [SerializeField]
-    private float _RunSpeed = 5f;
+    private float _RunSpeed = 6f;
     [SerializeField]
     private float _IdleTime = 2f;
     [SerializeField]
