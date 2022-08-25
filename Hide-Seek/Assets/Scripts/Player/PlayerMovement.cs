@@ -50,27 +50,28 @@ public class PlayerMovement : MonoBehaviour
     }
 
     private float _elapsedTime = 0f;
-    [SerializeField]
-    private float _amplitude = 10f;
+    private float _amplitude = 0.1f;
     private float _period;
     private void shake()
     {
         if (_input.IsShake)
         {
-            _period = 0.5f;
+            _period = 0.4f;
         }
         else
         {
-            _period = 1f;
+            _period = 2f;
         }
         Debug.Log("shake" + _period);
 
-        if (_elapsedTime > 2 * _period)
+        if (_elapsedTime > _period)
         {
             _elapsedTime = 0f;
         }
 
         _elapsedTime += Time.deltaTime;
-        _mainCam.transform.position = new Vector3(0f, 0.5f + _amplitude * Mathf.Sin(_elapsedTime / (_period * Mathf.PI)), 0f);
+        float shake = _amplitude * Mathf.Sin(_elapsedTime * 2 * Mathf.PI / _period);
+
+        _mainCam.transform.localPosition = new Vector3(0f, 0.5f + shake, 0f);
     }
 }
