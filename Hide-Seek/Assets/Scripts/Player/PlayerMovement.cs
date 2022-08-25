@@ -60,7 +60,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            _period = 2f;
+            _period = 3f;
         }
         Debug.Log("shake" + _period);
 
