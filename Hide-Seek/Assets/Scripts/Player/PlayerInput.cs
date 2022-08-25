@@ -52,8 +52,6 @@ public class PlayerInput : MonoBehaviour
     [SerializeField]
     private string _MoveRightAxisName = "Horizontal";
     [SerializeField]
-    private string _RotateXAxisName = "Mouse Y";
-    [SerializeField]
     private string _RotateYAxisName = "Mouse X";
     private void Awake()
     {
@@ -96,27 +94,28 @@ public class PlayerInput : MonoBehaviour
 
     public void UpdateRotate()
     {
-        //RotateX = -Input.GetAxis(RotateXAxisName);
         RotateY = Input.GetAxis(_RotateYAxisName);
     }
 
     public void UpdateShake()
     {
-        bool isMoving;
-        if (MoveFront > 0.05f || MoveFront < -0.05f || MoveRight > 0.05f || MoveRight < -0.05f)
+        bool isMoving = false;
+
+        if (Mathf.Abs(MoveFront) > 0.05f)
         {
             isMoving = true;
         }
-        else
-        {
-            isMoving = false;
-        }
 
+        if (Mathf.Abs(MoveRight) > 0.05f)
+        {
+            isMoving = true;
+        }
+        
         if (IsMoving == isMoving)
         {
             return;
         }
-        
+
         IsMoving = isMoving;
     }
 
@@ -133,7 +132,6 @@ public class PlayerInput : MonoBehaviour
         if (Input.GetKey(KeyCode.Space))
         {
             UseWard?.Invoke();
-            // Debug.Log("Set");
         }
     }
 
@@ -152,11 +150,13 @@ public class PlayerInput : MonoBehaviour
 
     public void SetCursorLock() => _cursorLock = false;
     public void ToggleCursorLock(bool isPause) => _cursorLock = !isPause;
+    public void PauseMove(bool isPause) => IsMoving = !isPause;
     private void OnEnable()
     {
         GameManager.Instance.OnGameOver.AddListener(SetCursorLock);
         GameManager.Instance.OnEscape.AddListener(SetCursorLock);
         GameManager.Instance.OnPause.AddListener(ToggleCursorLock);
+        GameManager.Instance.OnPause.AddListener(PauseMove);
     }
 
     private void OnDisable()
@@ -164,6 +164,7 @@ public class PlayerInput : MonoBehaviour
         GameManager.Instance.OnGameOver.RemoveListener(SetCursorLock);
         GameManager.Instance.OnEscape.RemoveListener(SetCursorLock);
         GameManager.Instance.OnPause.RemoveListener(ToggleCursorLock);
+        GameManager.Instance.OnPause.RemoveListener(PauseMove);
         SetCursorLock();
         LockCursor();
     }

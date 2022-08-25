@@ -64,8 +64,8 @@ public class GameManager : SingletonBehaviour<GameManager>
 
     private void reset()
     {
-        CurrentKey = 0;
-        HealthCount = InitHealthCount;
+        _currentKey = 0;
+        _healthCount = InitHealthCount;
         _isGameOver = false;
         _isEscape = false;
         IsPause = false;

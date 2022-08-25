@@ -5,8 +5,6 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public GameObject Marker;
-    // public AudioClip FootStep;
-    // public float XAngleLimit = 60f;
     
     private PlayerInput _input;
     private Rigidbody _rigidbody;
@@ -15,7 +13,6 @@ public class PlayerMovement : MonoBehaviour
     private float _initPositionY;
     [SerializeField]
     private float _MoveSpeed = 7f;
-    private float _rotateXAxisSpeed = 30f;
     [SerializeField]
     private float _RotateYAxisSpeed = 300f;
     private void Awake()
@@ -29,6 +26,9 @@ public class PlayerMovement : MonoBehaviour
         _input.OnMove -= SetShake;
         _input.OnMove += SetShake;
         _period = _idleShake;
+
+        _input.OnMove -= SoundRun;
+        _input.OnMove += SoundRun;
     }
 
     private void Update()
@@ -74,10 +74,9 @@ public class PlayerMovement : MonoBehaviour
         {
             _elapsedTime = 0f;
         }
-        
         _elapsedTime += Time.deltaTime;
-        float shake = _amplitude * Mathf.Sin(_elapsedTime * 2f * Mathf.PI / _period);
 
+        float shake = _amplitude * Mathf.Sin(_elapsedTime * 2f * Mathf.PI / _period);
         _mainCam.transform.localPosition = new Vector3(0f, _initPositionY + shake, 0f);
     }
 
@@ -86,19 +85,22 @@ public class PlayerMovement : MonoBehaviour
         if (isMoving)
         {
             _period = _runShake;
-
-            if (!_audio.isPlaying)
-            {
-                _audio.Play();
-                // Debug.Log("playing");
-            }
         }
         else
         {
             _period = _idleShake;
+        }
+    }
 
+    public void SoundRun(bool isMoving)
+    {
+        if (!isMoving)
+        {
             _audio.Stop();
-            // Debug.Log("Stop");
+        }
+        else if(!_audio.isPlaying)
+        {
+            _audio.Play();
         }
     }
 }

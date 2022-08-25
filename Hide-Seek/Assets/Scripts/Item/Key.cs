@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Key : Item
 {
-    public float GetItemDist = 2f;
-
+    [SerializeField]
+    private float _GetItemDist = 5f;
     private new void Awake()
     {
         base.Awake();
@@ -26,7 +26,7 @@ public class Key : Item
         }
 
         Vector3 distance = other.transform.position - transform.position;
-        if(distance.sqrMagnitude < GetItemDist)
+        if(distance.sqrMagnitude < _GetItemDist)
         {
             GameManager.Instance.AddKey();
             gameObject.SetActive(false);

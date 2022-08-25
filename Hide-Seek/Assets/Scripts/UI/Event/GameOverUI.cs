@@ -9,6 +9,9 @@ public class GameOverUI : MonoBehaviour
     protected Button _restartBtn;
     protected Button _titleBtn;
     protected Button _quitBtn;
+    protected AudioSource _audio;
+    [SerializeField]
+    protected AudioClip _Clip;
     protected void Awake()
     {
         _childs = new GameObject[transform.childCount];
@@ -26,6 +29,8 @@ public class GameOverUI : MonoBehaviour
         _restartBtn.onClick.AddListener(Restart);
         _titleBtn.onClick.AddListener(LoadTitle);
         _quitBtn.onClick.AddListener(Quit);
+
+        _audio = GetComponent<AudioSource>();
     }
 
     public void Restart() => GameManager.Instance.Restart();
@@ -37,6 +42,7 @@ public class GameOverUI : MonoBehaviour
         {
             _childs[i].SetActive(true);
         }
+        _audio.PlayOneShot(_Clip);
     }
 
     private void OnEnable()

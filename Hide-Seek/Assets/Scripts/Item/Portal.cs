@@ -4,8 +4,23 @@ using UnityEngine;
 
 public class Portal : Item
 {
+    private AudioSource _audio;
     [SerializeField]
     private float _GetPortalDist = 2f;
+    private void Awake()
+    {
+        base.Awake();
+        _audio = GetComponent<AudioSource>();
+    }
+    private void OnEnable()
+    {
+        _audio.Play();
+    }
+    private void OnDisable()
+    {
+        _audio.Stop();
+    }
+
     private new void OnTriggerStay(Collider other)
     {
         base.OnTriggerStay(other);
@@ -19,6 +34,7 @@ public class Portal : Item
         if (distance.sqrMagnitude < _GetPortalDist)
         {
             GameManager.Instance.Escape();
+            gameObject.SetActive(false);
         }
     }
 
