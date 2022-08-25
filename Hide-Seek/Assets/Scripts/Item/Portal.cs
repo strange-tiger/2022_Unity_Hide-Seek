@@ -7,7 +7,7 @@ public class Portal : Item
     private AudioSource _audio;
     [SerializeField]
     private float _GetPortalDist = 2f;
-    private void Awake()
+    private new void Awake()
     {
         base.Awake();
         _audio = GetComponent<AudioSource>();

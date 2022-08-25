@@ -102,10 +102,9 @@ public class ItemSpawner : MonoBehaviour
                 if (!_navMeshAgent.CalculatePath(positionCandidate, path))
                 {
                     --i;
-                    //Debug.Log(_navMeshAgent.destination);
+                    Debug.Log("Recallnav");
                     continue;
                 }
-
                 _positions[j][i] = positionCandidate;
             }
         }

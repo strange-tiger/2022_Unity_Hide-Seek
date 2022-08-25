@@ -46,7 +46,6 @@ public class EnemyAI : Detectable
     private Rigidbody _rigidbody;
     private Animator _animator;
     private AudioSource _audioSource;
-    private Renderer _renderer;
 
     private bool _targetGameOver = false;
     private bool _hasTargetFound = false;
@@ -69,7 +68,6 @@ public class EnemyAI : Detectable
         _rigidbody = GetComponent<Rigidbody>();
         _animator = GetComponent<Animator>();
         // _audioSource = GetComponent<AudioSource>();
-        // _renderer = GetComponent<Renderer>();
 
         base.Awake();
 
