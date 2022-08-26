@@ -25,8 +25,6 @@ public class ItemSpawner : MonoBehaviour
     [Header("Positions")]
     [SerializeField]
     private int _PositionRange;
-    [SerializeField]
-    private float _FloatHeight = 0.5f;
     private void Awake()
     {
         _navMeshAgent = GetComponent<NavMeshAgent>();
@@ -85,7 +83,7 @@ public class ItemSpawner : MonoBehaviour
                 x = Random.Range(2, _PositionRange - 1);
                 y = Random.Range(2, _PositionRange - 1);
 
-                positionCandidate = new Vector3(x, _FloatHeight, y);
+                positionCandidate = new Vector3(x, 0f, y);
                 if (_positionUsedArr[y, x] == true)
                 {
                     --i;
