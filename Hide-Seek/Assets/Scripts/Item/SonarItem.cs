@@ -41,8 +41,8 @@ public class SonarItem : Item
             return;
         }
 
-        Vector3 distance = other.transform.position - transform.position;
-        if (distance.sqrMagnitude < _GetItemDist && !_used)
+        float distance = (other.transform.position - transform.position).sqrMagnitude;
+        if (distance < _GetItemDist)
         {
             _sonar?.SetActive(true);
             _used = true;

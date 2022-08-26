@@ -22,18 +22,12 @@ public static class EnemyAnimID
 
 public class EnemyAI : Detectable
 {
-    [SerializeField]
-    private LayerMask _TargetLayer;
+    // 상태
+    [Header("State")]
     [SerializeField]
     private EnemyState _State;
     [SerializeField]
     private EnemyState _PrevState = EnemyState.None;
-    [SerializeField]
-    private Vector3 _InitPosition = Vector3.zero;
-    [SerializeField]
-    private float _WalkSpeed = 1f;
-    [SerializeField]
-    private float _RunSpeed = 6f;
     [SerializeField]
     private float _IdleTime = 2f;
     [SerializeField]
@@ -41,13 +35,23 @@ public class EnemyAI : Detectable
     [SerializeField]
     private float _CatchTime = 5f;
 
+    // 이동
+    [Header("Move")]
+    [SerializeField]
+    private float _WalkSpeed = 1f;
+    [SerializeField]
+    private float _RunSpeed = 6f;
+    [SerializeField]
+    private Vector3 _InitPosition = Vector3.zero;
+    private Rigidbody _rigidbody;
+
+    // 추적
+    [Header("Target to Chase")]
+    [SerializeField]
+    private LayerMask _TargetLayer;
+
     private Transform _target;
     private NavMeshAgent _navMeshAgent;
-    private Rigidbody _rigidbody;
-    private Animator _animator;
-    private AudioSource _audioSource;
-
-    private bool _targetGameOver = false;
     private bool _hasTargetFound = false;
     public bool HasTargetFound
     {
@@ -62,6 +66,10 @@ public class EnemyAI : Detectable
         }
     }
 
+    // 연출
+    private Animator _animator;
+    private AudioSource _audioSource;
+    private bool _targetGameOver = false;
     private new void Awake()
     {
         _navMeshAgent = GetComponent<NavMeshAgent>();
@@ -94,7 +102,28 @@ public class EnemyAI : Detectable
             case EnemyState.Catch: UpdateCatch(); break;
         }
     }
+    private void ChangeState(EnemyState nextState)
+    {
+        StopAllCoroutines();
+        _navMeshAgent.isStopped = true;
 
+        _PrevState = _State;
+        _State = nextState;
+
+        _animator.SetBool(EnemyAnimID.IsIdle, false);
+        _animator.SetBool(EnemyAnimID.IsWalk, false);
+        _animator.SetBool(EnemyAnimID.IsRun, false);
+        _animator.SetBool(EnemyAnimID.IsCatch, false);
+
+        switch (_State)
+        {
+            case EnemyState.Idle: StartCoroutine(CoroutineIdle()); break;
+            case EnemyState.Walk: StartCoroutine(CoroutineWalk()); break;
+            case EnemyState.Run: StartCoroutine(CoroutineRun()); break;
+            case EnemyState.Catch: StartCoroutine(CoroutineCatch()); break;
+        }
+    }
+#region UpdateDetail
     private float _elapsedTime = 0f;
     void UpdateIdle()
     {
@@ -130,35 +159,26 @@ public class EnemyAI : Detectable
     }
     void UpdateRun()
     {
-        
+        if (_elapsedTime < 0.1f)
+        {
+            _elapsedTime += Time.deltaTime;
+            return;
+        }
+        _elapsedTime = 0f;
+
+        if (!FindTarget())
+        {
+            ChangeState(EnemyState.Idle);
+
+            return;
+        }
     }
     void UpdateCatch()
     {
         transform.LookAt(_target);
     }
-
-    private void ChangeState(EnemyState nextState)
-    {
-        StopAllCoroutines();
-        _navMeshAgent.isStopped = true;
-
-        _PrevState = _State;
-        _State = nextState;
-
-        _animator.SetBool(EnemyAnimID.IsIdle, false);
-        _animator.SetBool(EnemyAnimID.IsWalk, false);
-        _animator.SetBool(EnemyAnimID.IsRun, false);
-        _animator.SetBool(EnemyAnimID.IsCatch, false);
-
-        switch (_State)
-        {
-            case EnemyState.Idle: StartCoroutine(CoroutineIdle()); break;
-            case EnemyState.Walk: StartCoroutine(CoroutineWalk()); break;
-            case EnemyState.Run: StartCoroutine(CoroutineRun()); break;
-            case EnemyState.Catch: StartCoroutine(CoroutineCatch()); break;
-        }
-    }
-
+#endregion
+#region CoroutineDetail
     IEnumerator CoroutineIdle()
     {
         _animator.SetBool(EnemyAnimID.IsIdle, true);
@@ -183,8 +203,9 @@ public class EnemyAI : Detectable
         if(_navMeshAgent.destination == transform.position)
         {
             _navMeshAgent.isStopped = true;
+            float rotateDirection = 90f * Mathf.Pow(-1, Random.Range(0, 2));
 
-            transform.rotation *= Quaternion.Euler(0f, Random.Range(-1, 2) * 90f, 0f);
+            transform.rotation *= Quaternion.Euler(0f, rotateDirection, 0f);
             ChangeState(EnemyState.Idle);
         }
 
@@ -199,10 +220,10 @@ public class EnemyAI : Detectable
     {
         _animator.SetBool(EnemyAnimID.IsRun, true);
 
+        _navMeshAgent.isStopped = false;
+        _navMeshAgent.speed = _RunSpeed;
         while(true)
         {
-            _navMeshAgent.isStopped = false;
-            _navMeshAgent.speed = _RunSpeed;
             _navMeshAgent.SetDestination(_target.position);
             
             yield return new WaitForSeconds(0.1f);
@@ -220,15 +241,7 @@ public class EnemyAI : Detectable
             ChangeState(EnemyState.Idle);
         }
     }
-
-    private void backToPosition()
-    {
-        if (_targetGameOver)
-        {
-            return;
-        }
-        transform.position = _InitPosition;
-    }
+#endregion
 
     private Collider[] _targetCandidates = new Collider[5];
     private int _targetCandidateCount;
@@ -258,8 +271,15 @@ public class EnemyAI : Detectable
 
     public void TargetCatched()
     {
-        //Debug.Log("Catch");
         ChangeState(EnemyState.Catch);
+    }
+    private void backToPosition()
+    {
+        if (_targetGameOver)
+        {
+            return;
+        }
+        transform.position = _InitPosition;
     }
 
     public void TargetGameOver() => _targetGameOver = true;
@@ -269,7 +289,6 @@ public class EnemyAI : Detectable
         GameManager.Instance.OnGameOver.AddListener(TargetGameOver);
         GameManager.Instance.OnEscape.AddListener(TargetEscaped);
     }
-
     private void OnDisable()
     {
         GameManager.Instance.OnGameOver.RemoveListener(TargetGameOver);
@@ -280,7 +299,6 @@ public class EnemyAI : Detectable
     {
         base.OnTriggerStay(other);
     }
-
     private new void OnTriggerExit(Collider other)
     {
         base.OnTriggerExit(other);

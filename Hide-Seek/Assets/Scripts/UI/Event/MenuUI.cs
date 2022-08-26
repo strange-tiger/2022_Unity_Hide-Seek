@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MenuUI : GameOverUI
+public class MenuUI : EventUI
 {
     private new void Awake()
     {
@@ -32,11 +32,9 @@ public class MenuUI : GameOverUI
         GameManager.Instance.OnPause.AddListener(Toggle);
     }
 
-    private void OnDisable()
+    private new void OnDisable()
     {
+        base.OnDisable();
         GameManager.Instance.OnPause.RemoveListener(Toggle);
-        _restartBtn.onClick.RemoveListener(Restart);
-        _titleBtn.onClick.RemoveListener(LoadTitle);
-        _quitBtn.onClick.RemoveListener(Quit);
     }
 }

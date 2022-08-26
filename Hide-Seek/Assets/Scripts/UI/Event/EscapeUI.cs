@@ -3,13 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class EscapeUI : GameOverUI
+public class EscapeUI : EventUI
 {
     private GameObject _noticeGoalTxt;
     private GameObject _noticePortalTxt;
+    private AudioSource _audio;
+    [SerializeField]
+    private AudioClip _Clip;
     private new void Awake()
     {
         base.Awake();
+        _audio = GetComponent<AudioSource>();
 
         for (int i = 0; i < transform.childCount; i++)
         {
@@ -25,9 +29,14 @@ public class EscapeUI : GameOverUI
         _noticeGoalTxt?.SetActive(true);
     }
 
-    public new void Activate()
+    public void Activate()
     {
-        base.Activate();
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            _childs[i].SetActive(true);
+        }
+        _audio?.PlayOneShot(_Clip);
+
         _noticeGoalTxt?.SetActive(false);
         _noticePortalTxt?.SetActive(false);
     }
@@ -44,12 +53,10 @@ public class EscapeUI : GameOverUI
         GameManager.Instance.AllKeysCollected.AddListener(NoticePortal);
     }
 
-    private void OnDisable()
+    private new void OnDisable()
     {
+        base.OnDisable();
         GameManager.Instance.OnEscape.RemoveListener(Activate);
         GameManager.Instance.AllKeysCollected.RemoveListener(NoticePortal);
-        _restartBtn.onClick.RemoveListener(Restart);
-        _titleBtn.onClick.RemoveListener(LoadTitle);
-        _quitBtn.onClick.RemoveListener(Quit);
     }
 }

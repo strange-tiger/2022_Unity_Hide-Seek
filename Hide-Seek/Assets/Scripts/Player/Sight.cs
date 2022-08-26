@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class Sight : MonoBehaviour
 {
-    public PlayerInput input;
-
+    [Header("Sight Control")]
+    [SerializeField]
+    protected PlayerInput input;
     protected GameObject marker;
     [SerializeField]
     protected string markerName = "Marker_S";

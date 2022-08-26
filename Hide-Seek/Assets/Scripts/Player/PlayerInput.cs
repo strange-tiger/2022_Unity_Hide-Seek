@@ -5,13 +5,21 @@ using UnityEngine;
 
 public class PlayerInput : MonoBehaviour
 {
-    
+    // 이동 입력
     public float MoveFront { get; private set; }
     public float MoveRight { get; private set; }
 
     public float RotateX { get; private set; }
     public float RotateY { get; private set; }
 
+    [SerializeField]
+    private string _MoveFrontAxisName = "Vertical";
+    [SerializeField]
+    private string _MoveRightAxisName = "Horizontal";
+    [SerializeField]
+    private string _RotateYAxisName = "Mouse X";
+
+    // 플레이어 상태
     public event Action<bool> OnMove;
     public bool IsMoving
     {
@@ -25,7 +33,11 @@ public class PlayerInput : MonoBehaviour
             OnMove?.Invoke(_isMoving);
         }
     }
+    private bool _isMoving = false;
+    private PlayerHealth _health;
+    private bool _cursorLock = true;
 
+    // 맵 확대축소
     public event Action<bool> OnFullMap;
     public bool IsFullMap
     {
@@ -39,28 +51,13 @@ public class PlayerInput : MonoBehaviour
             OnFullMap?.Invoke(_isFullMap);
         }
     }
-
-    public event Action UseWard;
-
-    private PlayerHealth _health;
-    private bool _isMoving = false;
     private bool _isFullMap = false;
-    private bool _cursorLock = true;
 
-    [SerializeField]
-    private string _MoveFrontAxisName = "Vertical";
-    [SerializeField]
-    private string _MoveRightAxisName = "Horizontal";
-    [SerializeField]
-    private string _RotateYAxisName = "Mouse X";
+    // 와드 사용
+    public event Action UseWard;
     private void Awake()
     {
-        MoveFront = 0f;
-        MoveRight = 0f;
-        RotateX = 0f;
-        RotateY = 0f;
-        IsFullMap = false;
-        IsMoving = false;
+        reset();
         _cursorLock = true;
 
         _health = GetComponent<PlayerHealth>();
@@ -148,24 +145,24 @@ public class PlayerInput : MonoBehaviour
         }
     }
 
-    public void SetCursorLock() => _cursorLock = false;
+    public void UnlockCursor() => _cursorLock = false;
     public void ToggleCursorLock(bool isPause) => _cursorLock = !isPause;
     public void PauseMove(bool isPause) => IsMoving = !isPause;
     private void OnEnable()
     {
-        GameManager.Instance.OnGameOver.AddListener(SetCursorLock);
-        GameManager.Instance.OnEscape.AddListener(SetCursorLock);
+        GameManager.Instance.OnGameOver.AddListener(UnlockCursor);
+        GameManager.Instance.OnEscape.AddListener(UnlockCursor);
         GameManager.Instance.OnPause.AddListener(ToggleCursorLock);
         GameManager.Instance.OnPause.AddListener(PauseMove);
     }
 
     private void OnDisable()
     {
-        GameManager.Instance.OnGameOver.RemoveListener(SetCursorLock);
-        GameManager.Instance.OnEscape.RemoveListener(SetCursorLock);
+        GameManager.Instance.OnGameOver.RemoveListener(UnlockCursor);
+        GameManager.Instance.OnEscape.RemoveListener(UnlockCursor);
         GameManager.Instance.OnPause.RemoveListener(ToggleCursorLock);
         GameManager.Instance.OnPause.RemoveListener(PauseMove);
-        SetCursorLock();
+        UnlockCursor();
         LockCursor();
     }
 }

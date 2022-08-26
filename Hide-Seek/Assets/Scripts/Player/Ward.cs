@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Ward : Sight
 {
+    [Header("Ward")]
     public float Duration = 10f;
     public event Action<float> GaugeChanged;
     public float CurrentGauge

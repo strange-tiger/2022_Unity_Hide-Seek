@@ -25,8 +25,8 @@ public class Key : Item
             return;
         }
 
-        Vector3 distance = other.transform.position - transform.position;
-        if(distance.sqrMagnitude < _GetItemDist)
+        float distance = (other.transform.position - transform.position).sqrMagnitude;
+        if(distance < _GetItemDist)
         {
             GameManager.Instance.AddKey();
             gameObject.SetActive(false);

@@ -27,7 +27,6 @@ public class PlayerHealth : MonoBehaviour
         Revive();
         OnDeath?.Invoke();
 
-        // gameObject.SetActive(false);
         _movement.enabled = false;
         _setWard.enabled = false;
     }
@@ -76,10 +75,8 @@ public class PlayerHealth : MonoBehaviour
         if (collision.gameObject.tag == "Enemy")
         {
             transform.LookAt(collision.transform.position + _DeathSightHeight * Vector3.up);
-            // Debug.Log("Ouch");
 
             Die();
-            // Debug.Log("captured");
         }
     }
 }

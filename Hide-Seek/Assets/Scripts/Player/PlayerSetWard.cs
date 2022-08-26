@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class PlayerSetWard : MonoBehaviour
 {
-    public GameObject Ward;
-
+    [SerializeField]
+    private GameObject _Ward;
     private PlayerInput _input;
     private void Awake()
     {
@@ -17,10 +17,10 @@ public class PlayerSetWard : MonoBehaviour
 
     public void SetWard()
     {
-        if(!Ward.activeSelf)
+        if(!_Ward.activeSelf)
         {
-            Ward.transform.position = transform.position;
-            Ward.SetActive(true);
+            _Ward.transform.position = transform.position;
+            _Ward.SetActive(true);
         }
     }
 }

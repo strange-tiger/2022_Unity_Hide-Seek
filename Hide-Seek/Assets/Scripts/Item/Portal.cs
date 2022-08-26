@@ -30,8 +30,8 @@ public class Portal : Item
             return;
         }
 
-        Vector3 distance = other.transform.position - transform.position;
-        if (distance.sqrMagnitude < _GetPortalDist)
+        float distance = (other.transform.position - transform.position).sqrMagnitude;
+        if (distance < _GetPortalDist)
         {
             GameManager.Instance.Escape();
             gameObject.SetActive(false);
@@ -40,7 +40,7 @@ public class Portal : Item
 
     private new void Update()
     {
-        base.Update();
+        // base.Update();
     }
 
     private new void OnTriggerExit(Collider other)

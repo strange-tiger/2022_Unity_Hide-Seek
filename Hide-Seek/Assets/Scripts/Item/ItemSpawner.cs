@@ -12,15 +12,17 @@ public enum ItemIndex
 
 public class ItemSpawner : MonoBehaviour
 {
+    [Header("Items")]
     public GameObject[] ItemKinds;
 
     private NavMeshAgent _navMeshAgent;
     private GameObject[][] _items;
     private Vector3[][] _positions;
-    private bool[,] _positionUsedArr; 
-
+    private bool[,] _positionUsedArr;
     [SerializeField]
     private int[] _ItemCount;
+
+    [Header("Positions")]
     [SerializeField]
     private int _PositionRange;
     [SerializeField]
@@ -43,19 +45,16 @@ public class ItemSpawner : MonoBehaviour
         Debug.Assert(ItemKinds.Length == (int)ItemIndex.Max);
         Debug.Assert(ItemKinds.Length == _ItemCount.Length);
         int itemKind = (int)ItemIndex.Max;
-        
+
         setItemPositionArr(itemKind);
 
         _items = new GameObject[itemKind][];
         for (int j = 0; j < itemKind; ++j)
         {
             _items[j] = new GameObject[_ItemCount[j]];
-            //Debug.Log(ItemCount[j]);
-            //Debug.Log(ItemKinds[j] != null);
             for (int i = 0; i < _ItemCount[j]; ++i)
             {
                 _items[j][i] = Instantiate(ItemKinds[j], transform.position + _positions[j][i], Quaternion.identity);
-                
                 _items[j][i].transform.SetParent(transform);
                 _items[j][i].SetActive(true);
             }
@@ -86,9 +85,6 @@ public class ItemSpawner : MonoBehaviour
                 x = Random.Range(2, _PositionRange - 1);
                 y = Random.Range(2, _PositionRange - 1);
 
-                //count++;
-                //Debug.Assert(count < 50);
-
                 positionCandidate = new Vector3(x, _FloatHeight, y);
                 if (_positionUsedArr[y, x] == true)
                 {
@@ -109,7 +105,7 @@ public class ItemSpawner : MonoBehaviour
             }
         }
     }
-
+    [Header("Set Min Distance Between Items")]
     [SerializeField]
     private int _UsedArea = 10;
     private void markUsedArea(int y, int x)

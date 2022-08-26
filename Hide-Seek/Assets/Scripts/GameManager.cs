@@ -48,7 +48,7 @@ public class GameManager : SingletonBehaviour<GameManager>
             OnPause?.Invoke(_isPause);
         }
     }
-
+    [Header("Escape Conditions")]
     public int KeyCountMax = 10;
     public int InitHealthCount = 3;
 

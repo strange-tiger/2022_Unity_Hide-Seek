@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class Detectable : MonoBehaviour
 {
-    public LayerMask markerLayer;
-    public GameObject marker;
-
+    [Header("Detectable")]
+    [SerializeField]
+    protected LayerMask markerLayer;
+    [SerializeField]
+    protected GameObject marker;
     protected void Awake()
     {
         for (int i = 0; i < transform.childCount; ++i)

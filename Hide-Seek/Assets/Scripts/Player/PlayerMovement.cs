@@ -4,28 +4,23 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public GameObject Marker;
-    
     private PlayerInput _input;
     private Rigidbody _rigidbody;
     private AudioSource _audio;
     private Camera _mainCam;
-    private float _initPositionY;
-    [SerializeField]
-    private float _MoveSpeed = 7f;
-    [SerializeField]
-    private float _RotateYAxisSpeed = 300f;
+    private float _camInitPositionY;
+
     private void Awake()
     {
         _input = GetComponent<PlayerInput>();
         _rigidbody = GetComponent<Rigidbody>();
         _audio = GetComponent<AudioSource>();
         _mainCam = Camera.main;
-        _initPositionY = _mainCam.transform.localPosition.y;
+        _camInitPositionY = _mainCam.transform.localPosition.y;
 
         _input.OnMove -= SetShake;
         _input.OnMove += SetShake;
-        _period = _idleShake;
+        _period = _IdleShakePeriod;
 
         _input.OnMove -= SoundRun;
         _input.OnMove += SoundRun;
@@ -38,6 +33,9 @@ public class PlayerMovement : MonoBehaviour
         shake();
     }
 
+    [Header("Move")]
+    [SerializeField]
+    private float _MoveSpeed = 7f;
     private void move()
     {
         _input.UpdateMove();
@@ -46,6 +44,8 @@ public class PlayerMovement : MonoBehaviour
         _rigidbody.MovePosition(_rigidbody.position + deltaPosition);
     }
 
+    [SerializeField]
+    private float _RotateYAxisSpeed = 300f;
     private float rotationYAmount = 0f;
     private float rotationX = 0f;
     private void rotate()
@@ -61,13 +61,13 @@ public class PlayerMovement : MonoBehaviour
 
     private float _elapsedTime = 0f;
     private float _period;
-
+    [Header("Shake")]
     [SerializeField]
-    private float _amplitude = 0.1f;
+    private float _Amplitude = 0.1f;
     [SerializeField]
-    private float _idleShake = 3f;
+    private float _IdleShakePeriod = 3f;
     [SerializeField]
-    private float _runShake = 0.4f;
+    private float _RunShakePeriod = 0.4f;
     private void shake()
     {
         if (_elapsedTime > _period)
@@ -76,19 +76,19 @@ public class PlayerMovement : MonoBehaviour
         }
         _elapsedTime += Time.deltaTime;
 
-        float shake = _amplitude * Mathf.Sin(_elapsedTime * 2f * Mathf.PI / _period);
-        _mainCam.transform.localPosition = new Vector3(0f, _initPositionY + shake, 0f);
+        float shake = _Amplitude * Mathf.Sin(_elapsedTime * 2f * Mathf.PI / _period);
+        _mainCam.transform.localPosition = new Vector3(0f, _camInitPositionY + shake, 0f);
     }
 
     public void SetShake(bool isMoving)
     {
         if (isMoving)
         {
-            _period = _runShake;
+            _period = _RunShakePeriod;
         }
         else
         {
-            _period = _idleShake;
+            _period = _IdleShakePeriod;
         }
     }
 
