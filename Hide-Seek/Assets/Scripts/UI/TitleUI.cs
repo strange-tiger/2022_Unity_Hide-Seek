@@ -14,7 +14,7 @@ public class TitleUI : MonoBehaviour
         _startBtn = transform.GetChild(0).GetComponent<Button>();
         _quitBtn = transform.GetChild(1).GetComponent<Button>();
         _howBtn = transform.GetChild(2).GetComponent<Button>();
-        _howPanel = transform.GetChild(4).gameObject;
+        _howPanel = transform.GetChild(3).gameObject;
         _howPanel.SetActive(false);
 
         _startBtn.onClick.AddListener(start);
