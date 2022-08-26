@@ -46,21 +46,20 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField]
     private float _RotateYAxisSpeed = 300f;
-    private float rotationYAmount = 0f;
-    private float rotationX = 0f;
+
+    private float _rotationYAmount = 0f;
+    private float _rotationX = 0f;
     private void rotate()
     {
         _input.UpdateRotate();
-        rotationYAmount = _RotateYAxisSpeed * _input.RotateY * Time.deltaTime;
+        _rotationYAmount = _RotateYAxisSpeed * _input.RotateY * Time.deltaTime;
 
-        float rotationY = rotationYAmount;
-        Quaternion deltaRotation = Quaternion.Euler(rotationX, rotationY, 0f);
+        float rotationY = _rotationYAmount;
+        Quaternion deltaRotation = Quaternion.Euler(_rotationX, rotationY, 0f);
 
         _rigidbody.MoveRotation(_rigidbody.rotation * deltaRotation);
     }
 
-    private float _elapsedTime = 0f;
-    private float _period;
     [Header("Shake")]
     [SerializeField]
     private float _Amplitude = 0.1f;
@@ -68,6 +67,9 @@ public class PlayerMovement : MonoBehaviour
     private float _IdleShakePeriod = 3f;
     [SerializeField]
     private float _RunShakePeriod = 0.4f;
+
+    private float _elapsedTime = 0f;
+    private float _period;
     private void shake()
     {
         if (_elapsedTime > _period)
