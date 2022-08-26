@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -203,7 +204,7 @@ public class EnemyAI : Detectable
         if(_navMeshAgent.destination == transform.position)
         {
             _navMeshAgent.isStopped = true;
-            float rotateDirection = 90f * Mathf.Pow(-1, Random.Range(0, 2));
+            float rotateDirection = 90f * Mathf.Pow(-1, UnityEngine.Random.Range(0, 2));
 
             transform.rotation *= Quaternion.Euler(0f, rotateDirection, 0f);
             ChangeState(EnemyState.Idle);
@@ -248,6 +249,13 @@ public class EnemyAI : Detectable
     private bool FindTarget()
     {
         _targetCandidateCount = Physics.OverlapSphereNonAlloc(transform.position, 10f, _targetCandidates, _TargetLayer);
+
+        //if (Array.Exists(_targetCandidates, candidate => candidate.gameObject.CompareTag("Lure")))
+        //{
+        //    int index = Array.FindIndex(_targetCandidates, candidate => candidate.gameObject.CompareTag("Lure"));
+        //    _target = _targetCandidates[index].transform;
+        //    return true;
+        //}
 
         for (int i = 0; i < _targetCandidateCount; ++i)
         {
