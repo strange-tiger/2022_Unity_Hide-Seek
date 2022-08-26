@@ -34,13 +34,12 @@ public class Portal : Item
         if (distance < _GetPortalDist)
         {
             GameManager.Instance.Escape();
-            gameObject.SetActive(false);
         }
     }
 
     private new void Update()
     {
-        // base.Update();
+        marker.transform.Rotate(0f, rotationSpeed * Time.deltaTime, 0f, Space.World);
     }
 
     private new void OnTriggerExit(Collider other)
