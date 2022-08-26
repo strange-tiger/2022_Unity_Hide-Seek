@@ -9,7 +9,6 @@ public class PortalSpawner : MonoBehaviour
 
     private NavMeshAgent _navMeshAgent;
     private GameObject _portal;
-    private int _keyCountMax;
     private float _floatHeight;
     private void Awake()
     {
@@ -17,7 +16,6 @@ public class PortalSpawner : MonoBehaviour
         _navMeshAgent.isStopped = true;
         _portal = transform.GetChild(0).gameObject;
         _portal.SetActive(false);
-        _keyCountMax = GameManager.Instance.KeyCountMax;
         _floatHeight = _portal.transform.position.y;
     }
 
