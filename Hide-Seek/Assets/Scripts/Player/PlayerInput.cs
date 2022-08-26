@@ -55,6 +55,9 @@ public class PlayerInput : MonoBehaviour
 
     // 와드 사용
     public event Action UseWard;
+
+    // 미끼 사용
+    public event Action UseLure;
     private void Awake()
     {
         reset();
@@ -80,6 +83,7 @@ public class PlayerInput : MonoBehaviour
         LockCursor();
         UpdateFullMapToggle();
         UpdateUseWard();
+        UpdateUseLure();
     }
 
     public void UpdateMove()
@@ -116,6 +120,19 @@ public class PlayerInput : MonoBehaviour
         IsMoving = isMoving;
     }
 
+    private void LockCursor()
+    {
+        Cursor.visible = !_cursorLock;
+        if (_cursorLock)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Confined;
+        }
+    }
+
     public void UpdateFullMapToggle()
     {
         if(Input.GetKeyDown(KeyCode.M))
@@ -132,16 +149,11 @@ public class PlayerInput : MonoBehaviour
         }
     }
 
-    private void LockCursor()
+    public void UpdateUseLure()
     {
-        Cursor.visible = !_cursorLock;
-        if (_cursorLock)
+        if (Input.GetKey(KeyCode.LeftShift))
         {
-            Cursor.lockState = CursorLockMode.Locked;
-        }
-        else
-        {
-            Cursor.lockState = CursorLockMode.Confined;
+            UseLure?.Invoke();
         }
     }
 

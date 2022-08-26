@@ -1045,7 +1045,7 @@ MonoBehaviour:
   _WalkTime: 5
   _CatchTime: 5
   _WalkSpeed: 1
-  _RunSpeed: 6
+  _RunSpeed: 8
   _InitPosition: {x: 0, y: 0, z: 0}
   _TargetLayer:
     serializedVersion: 2

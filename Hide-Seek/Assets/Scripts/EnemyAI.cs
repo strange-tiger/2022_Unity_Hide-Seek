@@ -40,7 +40,7 @@ public class EnemyAI : Detectable
     [SerializeField]
     private float _WalkSpeed = 1f;
     [SerializeField]
-    private float _RunSpeed = 6f;
+    private float _RunSpeed = 8f;
     [SerializeField]
     private Vector3 _InitPosition = Vector3.zero;
     private Rigidbody _rigidbody;
@@ -96,10 +96,10 @@ public class EnemyAI : Detectable
     {
         switch (_State)
         {
-            case EnemyState.Idle: UpdateIdle(); break;
-            case EnemyState.Walk: UpdateWalk(); break;
-            case EnemyState.Run: UpdateRun(); break;
-            case EnemyState.Catch: UpdateCatch(); break;
+            case EnemyState.Idle:   UpdateIdle(); break;
+            case EnemyState.Walk:   UpdateWalk(); break;
+            case EnemyState.Run:    UpdateRun(); break;
+            case EnemyState.Catch:  UpdateCatch(); break;
         }
     }
     private void ChangeState(EnemyState nextState)
@@ -117,10 +117,10 @@ public class EnemyAI : Detectable
 
         switch (_State)
         {
-            case EnemyState.Idle: StartCoroutine(CoroutineIdle()); break;
-            case EnemyState.Walk: StartCoroutine(CoroutineWalk()); break;
-            case EnemyState.Run: StartCoroutine(CoroutineRun()); break;
-            case EnemyState.Catch: StartCoroutine(CoroutineCatch()); break;
+            case EnemyState.Idle:   StartCoroutine(CoroutineIdle()); break;
+            case EnemyState.Walk:   StartCoroutine(CoroutineWalk()); break;
+            case EnemyState.Run:    StartCoroutine(CoroutineRun()); break;
+            case EnemyState.Catch:  StartCoroutine(CoroutineCatch()); break;
         }
     }
 #region UpdateDetail
@@ -251,16 +251,13 @@ public class EnemyAI : Detectable
 
         for (int i = 0; i < _targetCandidateCount; ++i)
         {
+            Debug.Log($"{_targetCandidates[i].name} + {i}");
             Collider targetCandidate = _targetCandidates[i];
 
             Debug.Assert(targetCandidate != null);
             if (targetCandidate != null && !_targetGameOver)
             {
-                _target = targetCandidate.GetComponent<Transform>(); ;
-                PlayerHealth playerHealth = _target.GetComponent<PlayerHealth>();
-
-                playerHealth.OnDeath -= this.TargetCatched;
-                playerHealth.OnDeath += this.TargetCatched;
+                _target = targetCandidate.GetComponent<Transform>();
 
                 return true;
             }
@@ -273,9 +270,14 @@ public class EnemyAI : Detectable
     {
         ChangeState(EnemyState.Catch);
     }
+    
     private void backToPosition()
     {
         if (_targetGameOver)
+        {
+            return;
+        }
+        if (_target.tag != "Player")
         {
             return;
         }
