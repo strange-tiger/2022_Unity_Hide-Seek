@@ -248,30 +248,40 @@ public class EnemyAI : Detectable
     private int _targetCandidateCount;
     private bool FindTarget()
     {
+        float minDistance = 101f;
+        float distance;
+
         _targetCandidateCount = Physics.OverlapSphereNonAlloc(transform.position, 10f, _targetCandidates, _TargetLayer);
-
-        //if (Array.Exists(_targetCandidates, candidate => candidate.gameObject.CompareTag("Lure")))
-        //{
-        //    int index = Array.FindIndex(_targetCandidates, candidate => candidate.gameObject.CompareTag("Lure"));
-        //    _target = _targetCandidates[index].transform;
-        //    return true;
-        //}
-
         for (int i = 0; i < _targetCandidateCount; ++i)
         {
-            Debug.Log($"{_targetCandidates[i].name} + {i}");
             Collider targetCandidate = _targetCandidates[i];
 
             Debug.Assert(targetCandidate != null);
-            if (targetCandidate != null && !_targetGameOver)
+            if (targetCandidate == null)
             {
+                return false;
+            }
+            if (_targetGameOver)
+            {
+                return false;
+            }
+            
+            distance = (targetCandidate.transform.position - transform.position).magnitude;
+            if (minDistance > distance)
+            {
+                minDistance = distance;
                 _target = targetCandidate.GetComponent<Transform>();
-
-                return true;
             }
         }
 
-        return false;
+        if (_targetCandidateCount > 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public void TargetCatched()
