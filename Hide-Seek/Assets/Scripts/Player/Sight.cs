@@ -18,7 +18,6 @@ public class Sight : MonoBehaviour
             {
                 marker = transform.GetChild(i).gameObject;
                 marker.SetActive(false);
-                // Debug.Log($"Success:{marker.name}");
             }
         }
 

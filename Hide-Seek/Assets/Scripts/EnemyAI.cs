@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -40,7 +41,7 @@ public class EnemyAI : Detectable
     [SerializeField]
     private float _WalkSpeed = 1f;
     [SerializeField]
-    private float _RunSpeed = 6f;
+    private float _RunSpeed = 8f;
     [SerializeField]
     private Vector3 _InitPosition = Vector3.zero;
     private Rigidbody _rigidbody;
@@ -96,10 +97,10 @@ public class EnemyAI : Detectable
     {
         switch (_State)
         {
-            case EnemyState.Idle: UpdateIdle(); break;
-            case EnemyState.Walk: UpdateWalk(); break;
-            case EnemyState.Run: UpdateRun(); break;
-            case EnemyState.Catch: UpdateCatch(); break;
+            case EnemyState.Idle:   UpdateIdle(); break;
+            case EnemyState.Walk:   UpdateWalk(); break;
+            case EnemyState.Run:    UpdateRun(); break;
+            case EnemyState.Catch:  UpdateCatch(); break;
         }
     }
     private void ChangeState(EnemyState nextState)
@@ -117,10 +118,10 @@ public class EnemyAI : Detectable
 
         switch (_State)
         {
-            case EnemyState.Idle: StartCoroutine(CoroutineIdle()); break;
-            case EnemyState.Walk: StartCoroutine(CoroutineWalk()); break;
-            case EnemyState.Run: StartCoroutine(CoroutineRun()); break;
-            case EnemyState.Catch: StartCoroutine(CoroutineCatch()); break;
+            case EnemyState.Idle:   StartCoroutine(CoroutineIdle()); break;
+            case EnemyState.Walk:   StartCoroutine(CoroutineWalk()); break;
+            case EnemyState.Run:    StartCoroutine(CoroutineRun()); break;
+            case EnemyState.Catch:  StartCoroutine(CoroutineCatch()); break;
         }
     }
 #region UpdateDetail
@@ -203,7 +204,7 @@ public class EnemyAI : Detectable
         if(_navMeshAgent.destination == transform.position)
         {
             _navMeshAgent.isStopped = true;
-            float rotateDirection = 90f * Mathf.Pow(-1, Random.Range(0, 2));
+            float rotateDirection = 90f * Mathf.Pow(-1, UnityEngine.Random.Range(0, 2));
 
             transform.rotation *= Quaternion.Euler(0f, rotateDirection, 0f);
             ChangeState(EnemyState.Idle);
@@ -247,35 +248,54 @@ public class EnemyAI : Detectable
     private int _targetCandidateCount;
     private bool FindTarget()
     {
-        _targetCandidateCount = Physics.OverlapSphereNonAlloc(transform.position, 10f, _targetCandidates, _TargetLayer);
+        float minDistance = 101f;
+        float distance;
 
+        _targetCandidateCount = Physics.OverlapSphereNonAlloc(transform.position, 10f, _targetCandidates, _TargetLayer);
         for (int i = 0; i < _targetCandidateCount; ++i)
         {
             Collider targetCandidate = _targetCandidates[i];
 
             Debug.Assert(targetCandidate != null);
-            if (targetCandidate != null && !_targetGameOver)
+            if (targetCandidate == null)
             {
-                _target = targetCandidate.GetComponent<Transform>(); ;
-                PlayerHealth playerHealth = _target.GetComponent<PlayerHealth>();
-
-                playerHealth.OnDeath -= this.TargetCatched;
-                playerHealth.OnDeath += this.TargetCatched;
-
-                return true;
+                return false;
+            }
+            if (_targetGameOver)
+            {
+                return false;
+            }
+            
+            distance = (targetCandidate.transform.position - transform.position).magnitude;
+            if (minDistance > distance)
+            {
+                minDistance = distance;
+                _target = targetCandidate.GetComponent<Transform>();
             }
         }
 
-        return false;
+        if (_targetCandidateCount > 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public void TargetCatched()
     {
         ChangeState(EnemyState.Catch);
     }
+    
     private void backToPosition()
     {
         if (_targetGameOver)
+        {
+            return;
+        }
+        if (_target.tag != "Player")
         {
             return;
         }

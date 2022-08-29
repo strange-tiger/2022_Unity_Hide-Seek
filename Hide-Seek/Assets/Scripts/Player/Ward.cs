@@ -51,12 +51,12 @@ public class Ward : Sight
         }
         transform.localScale = 0.01f * Vector3.one;
 
-        int coefficient = (int)(Duration / _Cooltime);
+        float coefficient = Duration / _Cooltime;
         
         while (CurrentGauge < _Cooltime * coefficient)
         {
             yield return new WaitForSeconds(Time.deltaTime);
-            CurrentGauge += Time.deltaTime * Duration / _Cooltime;
+            CurrentGauge += Time.deltaTime * coefficient;
         }
         CurrentGauge = Duration;
         gameObject.SetActive(false);

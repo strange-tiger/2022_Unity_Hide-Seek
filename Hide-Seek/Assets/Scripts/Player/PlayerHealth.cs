@@ -9,12 +9,14 @@ public class PlayerHealth : MonoBehaviour
     private PlayerMovement _movement;
     private PlayerSetWard _setWard;
     private Vector3 _playerInitialPosition;
-    private bool _revivable;
+    private bool _revivable = true;
+    private bool _isDead = false;
     [SerializeField]
     private float _DeathSightHeight = 0.3f;
     private void Awake()
     {
         _revivable = true;
+        _isDead = false;
         _movement = GetComponent<PlayerMovement>();
         _setWard = GetComponent<PlayerSetWard>();
         _playerInitialPosition = transform.position;
@@ -22,6 +24,12 @@ public class PlayerHealth : MonoBehaviour
 
     public void Die()
     {
+        if (_isDead == true)
+        {
+            return;
+        }
+        _isDead = true;
+        
         GameManager.Instance.SubHealth();
         GameManager.Instance.End();
         Revive();
@@ -42,6 +50,7 @@ public class PlayerHealth : MonoBehaviour
     public IEnumerator WaitRevive()
     {
         yield return new WaitForSeconds(3f);
+        _isDead = false;
         _movement.enabled = true;
         _setWard.enabled = true;
 
@@ -75,6 +84,9 @@ public class PlayerHealth : MonoBehaviour
         if (collision.gameObject.tag == "Enemy")
         {
             transform.LookAt(collision.transform.position + _DeathSightHeight * Vector3.up);
+
+            EnemyAI enemy = collision.gameObject.GetComponent<EnemyAI>();
+            enemy.TargetCatched();
 
             Die();
         }
