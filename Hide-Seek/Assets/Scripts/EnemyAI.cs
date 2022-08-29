@@ -47,25 +47,14 @@ public class EnemyAI : Detectable
     private Rigidbody _rigidbody;
 
     // 추적
+    public Action TargetDeath;
     [Header("Target to Chase")]
     [SerializeField]
     private LayerMask _TargetLayer;
 
+
     private Transform _target;
     private NavMeshAgent _navMeshAgent;
-    private bool _hasTargetFound = false;
-    public bool HasTargetFound
-    {
-        get
-        {
-            return _hasTargetFound;
-        }
-
-        set
-        {
-            _hasTargetFound = value;
-        }
-    }
 
     // 연출
     private Animator _animator;
@@ -79,6 +68,9 @@ public class EnemyAI : Detectable
         // _audioSource = GetComponent<AudioSource>();
 
         base.Awake();
+
+        TargetDeath -= backToPosition;
+        TargetDeath += backToPosition;
 
         if(_InitPosition == Vector3.zero)
         {
@@ -166,7 +158,7 @@ public class EnemyAI : Detectable
             return;
         }
         _elapsedTime = 0f;
-
+        
         if (!FindTarget())
         {
             ChangeState(EnemyState.Idle);
@@ -237,8 +229,8 @@ public class EnemyAI : Detectable
         while (true)
         {
             yield return new WaitForSeconds(_CatchTime);
-            
-            backToPosition();
+
+            TargetDeath?.Invoke();
             ChangeState(EnemyState.Idle);
         }
     }
@@ -248,20 +240,20 @@ public class EnemyAI : Detectable
     private int _targetCandidateCount;
     private bool FindTarget()
     {
+        if (_targetGameOver)
+        {
+            return false;
+        }
+        
         float minDistance = 101f;
         float distance;
-
-        _targetCandidateCount = Physics.OverlapSphereNonAlloc(transform.position, 10f, _targetCandidates, _TargetLayer);
-        for (int i = 0; i < _targetCandidateCount; ++i)
+        int targetCandidateCount = Physics.OverlapSphereNonAlloc(transform.position, 10f, _targetCandidates, _TargetLayer);
+        for (int i = 0; i < targetCandidateCount; ++i)
         {
             Collider targetCandidate = _targetCandidates[i];
 
             Debug.Assert(targetCandidate != null);
             if (targetCandidate == null)
-            {
-                return false;
-            }
-            if (_targetGameOver)
             {
                 return false;
             }
@@ -274,7 +266,7 @@ public class EnemyAI : Detectable
             }
         }
 
-        if (_targetCandidateCount > 0)
+        if (targetCandidateCount > 0)
         {
             return true;
         }
@@ -295,7 +287,7 @@ public class EnemyAI : Detectable
         {
             return;
         }
-        if (_target.tag != "Player")
+        if(!_target.CompareTag("Player"))
         {
             return;
         }

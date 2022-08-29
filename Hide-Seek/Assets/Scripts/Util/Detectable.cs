@@ -2,13 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Detectable : MonoBehaviour
+public abstract class Detectable : MonoBehaviour
 {
     [Header("Detectable")]
     [SerializeField]
     protected LayerMask markerLayer;
     [SerializeField]
     protected GameObject marker;
+    protected int playerLayer;
+    protected int wardLayer;
     protected void Awake()
     {
         for (int i = 0; i < transform.childCount; ++i)
@@ -19,11 +21,18 @@ public class Detectable : MonoBehaviour
                 marker.SetActive(false);
             }
         }
+
+        playerLayer = LayerMask.NameToLayer("Player");
+        wardLayer = LayerMask.NameToLayer("Ward");
     }
 
     protected void OnTriggerStay(Collider other)
     {
-        if (other.tag == "Player" || other.tag == "Ward")
+        if (other.gameObject.layer == playerLayer)
+        {
+            marker.SetActive(true);
+        }
+        if (other.gameObject.layer == wardLayer)
         {
             marker.SetActive(true);
         }
@@ -31,7 +40,11 @@ public class Detectable : MonoBehaviour
 
     protected void OnTriggerExit(Collider other)
     {
-        if (other.tag == "Player" || other.tag == "Ward")
+        if (other.gameObject.layer == playerLayer)
+        {
+            marker.SetActive(false);
+        }
+        if (other.gameObject.layer == wardLayer)
         {
             marker.SetActive(false);
         }

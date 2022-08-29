@@ -5,8 +5,6 @@ using UnityEngine;
 public class SonarItem : Item
 {
     [SerializeField]
-    private float _GetItemDist = 5f;
-    [SerializeField]
     private AudioClip _SonarSound;
     private AudioSource _audio;
     private GameObject _sonar;
@@ -36,13 +34,8 @@ public class SonarItem : Item
     {
         base.OnTriggerStay(other);
 
-        if (other.tag != "Player")
-        {
-            return;
-        }
-
         float distance = (other.transform.position - transform.position).sqrMagnitude;
-        if (distance < _GetItemDist)
+        if (distance < getDist)
         {
             _sonar?.SetActive(true);
             _used = true;

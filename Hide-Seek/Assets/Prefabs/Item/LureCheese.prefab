@@ -14,13 +14,13 @@ GameObject:
   - component: {fileID: 2989687781495660365}
   - component: {fileID: 9085899383915059146}
   - component: {fileID: 3914437246486404868}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: LureCheese
-  m_TagString: Untagged
+  m_TagString: Lure
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6371647792205259085
 Transform:
   m_ObjectHideFlags: 0

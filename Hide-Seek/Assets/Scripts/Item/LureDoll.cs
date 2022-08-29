@@ -24,6 +24,7 @@ public class LureDoll : Detectable
 
     [SerializeField]
     private float _Cooltime = 30f;
+    private int _enemyLayer;
     private Collider _lure;
     private MeshRenderer _lureRenderer;
     private new void Awake()
@@ -31,6 +32,7 @@ public class LureDoll : Detectable
         base.Awake();
 
         CurrentGauge = Duration;
+        _enemyLayer = LayerMask.NameToLayer("Enemy");
         _lure = GetComponent<Collider>();
         _lureRenderer = GetComponent<MeshRenderer>();
         
@@ -78,7 +80,7 @@ public class LureDoll : Detectable
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Enemy")
+        if (collision.gameObject.layer == _enemyLayer)
         {
             EnemyAI enemy = collision.gameObject.GetComponent<EnemyAI>();
             enemy.TargetCatched();

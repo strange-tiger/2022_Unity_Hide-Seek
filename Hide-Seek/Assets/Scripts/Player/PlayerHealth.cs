@@ -11,14 +11,16 @@ public class PlayerHealth : MonoBehaviour
     private Vector3 _playerInitialPosition;
     private bool _revivable = true;
     private bool _isDead = false;
+    private int _enemyLayer;
     [SerializeField]
     private float _DeathSightHeight = 0.3f;
     private void Awake()
     {
-        _revivable = true;
-        _isDead = false;
         _movement = GetComponent<PlayerMovement>();
         _setWard = GetComponent<PlayerSetWard>();
+        _revivable = true;
+        _isDead = false;
+        _enemyLayer = LayerMask.NameToLayer("Enemy");
         _playerInitialPosition = transform.position;
     }
 
@@ -78,10 +80,9 @@ public class PlayerHealth : MonoBehaviour
         GameManager.Instance.OnPause.RemoveListener(SetMovable);
     }
 
-
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Enemy")
+        if (collision.gameObject.layer == _enemyLayer)
         {
             transform.LookAt(collision.transform.position + _DeathSightHeight * Vector3.up);
 

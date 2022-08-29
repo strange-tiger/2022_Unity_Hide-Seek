@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5880835152506327267}
   - component: {fileID: 6820087430356964773}
   - component: {fileID: 4684009997682673503}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Ward
   m_TagString: Ward
   m_Icon: {fileID: 0}
@@ -115,9 +115,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   input: {fileID: 0}
   markerName: Marker_S
-  SightSize: 0.5
   Duration: 10
-  Cooltime: 5
+  _SightSize: 0.5
+  _Cooltime: 5
   RotationSpeed: 60
 --- !u!54 &4684009997682673503
 Rigidbody:

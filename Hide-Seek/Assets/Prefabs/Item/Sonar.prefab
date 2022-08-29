@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5880835152506327267}
   - component: {fileID: 6463963789505053656}
   - component: {fileID: 2060732026339611344}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Sonar
   m_TagString: Ward
   m_Icon: {fileID: 0}

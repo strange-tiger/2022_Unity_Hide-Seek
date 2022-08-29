@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Key : Item
 {
-    [SerializeField]
-    private float _GetItemDist = 5f;
     private new void Awake()
     {
         base.Awake();
@@ -20,13 +18,8 @@ public class Key : Item
     {
         base.OnTriggerStay(other);
 
-        if (other.tag != "Player")
-        {
-            return;
-        }
-
         float distance = (other.transform.position - transform.position).sqrMagnitude;
-        if(distance < _GetItemDist)
+        if(distance < getDist)
         {
             GameManager.Instance.AddKey();
             gameObject.SetActive(false);

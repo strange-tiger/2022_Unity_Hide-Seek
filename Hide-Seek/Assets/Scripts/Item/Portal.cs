@@ -6,8 +6,6 @@ public class Portal : Item
 {
     private AudioSource _audio;
     private GameObject _effects;
-    [SerializeField]
-    private float _GetPortalDist = 2f;
     private new void Awake()
     {
         base.Awake();
@@ -26,6 +24,11 @@ public class Portal : Item
 
     private new void Update()
     {
+        rotate();
+    }
+
+    public new void rotate()
+    {
         marker.transform.Rotate(0f, rotationSpeed * Time.deltaTime, 0f, Space.World);
     }
 
@@ -33,14 +36,11 @@ public class Portal : Item
     {
         base.OnTriggerStay(other);
 
-        if (other.tag != "Player")
-        {
-            return;
-        }
+        getDist = 2f;
         _effects.SetActive(true);
 
         float distance = (other.transform.position - transform.position).sqrMagnitude;
-        if (distance < _GetPortalDist)
+        if (distance < getDist)
         {
             GameManager.Instance.Escape();
         }
@@ -50,7 +50,7 @@ public class Portal : Item
     {
         base.OnTriggerExit(other);
 
-        if (other.tag != "Player")
+        if (other.CompareTag("Player"))
         {
             return;
         }

@@ -98,11 +98,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5880835152506327266}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b29bcab981652c7419e30a59aa1c3029, type: 3}
+  m_Script: {fileID: 11500000, guid: f81f828a76293f74c98e715f731ed7e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  markerLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  marker: {fileID: 0}
   rotationSpeed: 60
