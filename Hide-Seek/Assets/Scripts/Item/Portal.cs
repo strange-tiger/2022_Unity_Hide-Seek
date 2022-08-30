@@ -27,7 +27,7 @@ public class Portal : Item
         rotate();
     }
 
-    public new void rotate()
+    public void rotate()
     {
         marker.transform.Rotate(0f, rotationSpeed * Time.deltaTime, 0f, Space.World);
     }
