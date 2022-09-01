@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class GameManager : SingletonBehaviour<GameManager>
 {
@@ -85,38 +85,10 @@ public class GameManager : SingletonBehaviour<GameManager>
         nonVRobj = next.GetRootGameObjects()[0];
         VRobj = next.GetRootGameObjects()[1];
 
-        if (nonVRobj.name != "nonVR")
-        {
-            for (int i = 2; i < next.rootCount; ++i)
-            {
-                GameObject temp = next.GetRootGameObjects()[i];
-
-                if (temp.name == "nonVR")
-                {
-                    nonVRobj = temp;
-                    break;
-                }
-            }
-
-            nonVRobj = null;
-        }
+        checkAndSetChunk(next, nonVRobj, "nonVR");
         Debug.Assert(nonVRobj != null);
 
-        if (VRobj.name != "VR")
-        {
-            for (int i = 2; i < next.rootCount; ++i)
-            {
-                GameObject temp = next.GetRootGameObjects()[i];
-
-                if (temp.name == "VR")
-                {
-                    VRobj = temp;
-                    break;
-                }
-            }
-
-            VRobj = null;
-        }
+        checkAndSetChunk(next, VRobj, "VR");
         Debug.Assert(VRobj != null);
 
 #if UNITY_ANDROID
@@ -130,6 +102,25 @@ public class GameManager : SingletonBehaviour<GameManager>
         nonVREventSystem.enabled = true;
         VREventSystem.enabled = false;
 #endif
+    }
+
+    private void checkAndSetChunk(Scene next, GameObject chunk, string chunkName)
+    {
+        if (chunk.name != chunkName)
+        {
+            for (int i = 2; i < next.rootCount; ++i)
+            {
+                GameObject temp = next.GetRootGameObjects()[i];
+
+                if (temp.name == chunkName)
+                {
+                    chunk = temp;
+                    break;
+                }
+            }
+
+            chunk = null;
+        }
     }
 
     private void Start()    
