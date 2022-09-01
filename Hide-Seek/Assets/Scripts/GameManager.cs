@@ -187,19 +187,7 @@ public class GameManager : SingletonBehaviour<GameManager>
 
     private bool uiExceptionHandling()
     {
-        if (_isGameOver)
-        {
-            return true;
-        }
-        if (_isEscape)
-        {
-            return true;
-        }
-        if (IsPause)
-        {
-            return true;
-        }
-        if (SceneManager.GetActiveScene().buildIndex == 0)
+        if (_isGameOver || _isEscape || IsPause || SceneManager.GetActiveScene().buildIndex == 0)
         {
             return true;
         }

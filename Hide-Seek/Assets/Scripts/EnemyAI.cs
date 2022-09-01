@@ -47,7 +47,7 @@ public class EnemyAI : Detectable
     private Rigidbody _rigidbody;
 
     // ÃßÀû
-    public Action TargetDeath;
+    public static Action TargetDeath;
     [Header("Target to Chase")]
     [SerializeField]
     private LayerMask _TargetLayer;
@@ -231,7 +231,10 @@ public class EnemyAI : Detectable
         {
             yield return new WaitForSeconds(_CatchTime);
 
-            TargetDeath?.Invoke();
+            if (_target.CompareTag("Player"))
+            {
+                TargetDeath?.Invoke();
+            }
             ChangeState(EnemyState.Idle);
         }
     }
@@ -288,10 +291,7 @@ public class EnemyAI : Detectable
         {
             return;
         }
-        if(!_target.CompareTag("Player"))
-        {
-            return;
-        }
+        
         transform.position = _InitPosition;
     }
 
