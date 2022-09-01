@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
 public class GameManager : SingletonBehaviour<GameManager>
 {
@@ -57,6 +58,80 @@ public class GameManager : SingletonBehaviour<GameManager>
     private bool _isGameOver = false;
     private bool _isEscape = false;
     private bool _isPause = false;
+    private new void Awake()
+    {
+        base.Awake();
+
+        SceneManager.activeSceneChanged -= SetVR;
+        SceneManager.activeSceneChanged += SetVR;
+    }
+
+    private GameObject nonVRobj;
+    private GameObject VRobj;
+    private StandaloneInputModule nonVREventSystem;
+    private OVRInputModule VREventSystem;
+    private void SetVR(Scene current, Scene next)
+    {
+        nonVRobj = null;
+        VRobj = null;
+        nonVREventSystem = FindObjectOfType<StandaloneInputModule>();
+        VREventSystem = FindObjectOfType<OVRInputModule>();
+
+        if (current.name == null)
+        {
+            Debug.Log("Game Start");
+        }
+
+        nonVRobj = next.GetRootGameObjects()[0];
+        VRobj = next.GetRootGameObjects()[1];
+
+        if (nonVRobj.name != "nonVR")
+        {
+            for (int i = 2; i < next.rootCount; ++i)
+            {
+                GameObject temp = next.GetRootGameObjects()[i];
+
+                if (temp.name == "nonVR")
+                {
+                    nonVRobj = temp;
+                    break;
+                }
+            }
+
+            nonVRobj = null;
+        }
+        Debug.Assert(nonVRobj != null);
+
+        if (VRobj.name != "VR")
+        {
+            for (int i = 2; i < next.rootCount; ++i)
+            {
+                GameObject temp = next.GetRootGameObjects()[i];
+
+                if (temp.name == "VR")
+                {
+                    VRobj = temp;
+                    break;
+                }
+            }
+
+            VRobj = null;
+        }
+        Debug.Assert(VRobj != null);
+
+#if UNITY_ANDROID
+        nonVRobj.SetActive(false);
+        VRobj.SetActive(true);
+        nonVREventSystem.enabled = true;
+        VREventSystem.enabled = false;
+#else
+        nonVRobj.SetActive(true);
+        VRobj.SetActive(false);
+        nonVREventSystem.enabled = true;
+        VREventSystem.enabled = false;
+#endif
+    }
+
     private void Start()    
     {
         reset();
