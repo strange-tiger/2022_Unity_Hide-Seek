@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 public class GameManager : SingletonBehaviour<GameManager>
@@ -57,6 +58,71 @@ public class GameManager : SingletonBehaviour<GameManager>
     private bool _isGameOver = false;
     private bool _isEscape = false;
     private bool _isPause = false;
+    private new void Awake()
+    {
+        base.Awake();
+
+        SceneManager.activeSceneChanged -= SetVR;
+        SceneManager.activeSceneChanged += SetVR;
+    }
+
+    private GameObject nonVRobj;
+    private GameObject VRobj;
+    private StandaloneInputModule nonVREventSystem;
+    private OVRInputModule VREventSystem;
+    private void SetVR(Scene current, Scene next)
+    {
+        nonVRobj = null;
+        VRobj = null;
+        nonVREventSystem = FindObjectOfType<StandaloneInputModule>();
+        VREventSystem = FindObjectOfType<OVRInputModule>();
+
+        if (current.name == null)
+        {
+            Debug.Log("Game Start");
+        }
+
+        nonVRobj = next.GetRootGameObjects()[0];
+        VRobj = next.GetRootGameObjects()[1];
+
+        checkAndSetChunk(next, nonVRobj, "nonVR");
+        Debug.Assert(nonVRobj != null);
+
+        checkAndSetChunk(next, VRobj, "VR");
+        Debug.Assert(VRobj != null);
+
+#if UNITY_ANDROID
+        nonVRobj.SetActive(false);
+        VRobj.SetActive(true);
+        nonVREventSystem.enabled = true;
+        VREventSystem.enabled = false;
+#else
+        nonVRobj.SetActive(true);
+        VRobj.SetActive(false);
+        nonVREventSystem.enabled = true;
+        VREventSystem.enabled = false;
+#endif
+    }
+
+    private void checkAndSetChunk(Scene next, GameObject chunk, string chunkName)
+    {
+        if (chunk.name != chunkName)
+        {
+            for (int i = 2; i < next.rootCount; ++i)
+            {
+                GameObject temp = next.GetRootGameObjects()[i];
+
+                if (temp.name == chunkName)
+                {
+                    chunk = temp;
+                    break;
+                }
+            }
+
+            chunk = null;
+        }
+    }
+
     private void Start()    
     {
         reset();
@@ -92,22 +158,7 @@ public class GameManager : SingletonBehaviour<GameManager>
     {
         Debug.Log("Quit");
 
-        if (_isGameOver)
-        {
-            Application.Quit();
-            return;
-        }
-        if (_isEscape)
-        {
-            Application.Quit();
-            return;
-        }
-        if (IsPause)
-        {
-            Application.Quit();
-            return;
-        }
-        if (SceneManager.GetActiveScene().buildIndex == 0)
+        if (uiExceptionHandling())
         {
             Application.Quit();
             return;
@@ -116,19 +167,7 @@ public class GameManager : SingletonBehaviour<GameManager>
 
     public void Restart()
     {
-        if (_isGameOver)
-        {
-            reset();
-            SceneManager.LoadScene(1);
-            return;
-        }
-        if (_isEscape)
-        {
-            reset();
-            SceneManager.LoadScene(1);
-            return;
-        }
-        if (IsPause)
+        if (uiExceptionHandling())
         {
             reset();
             SceneManager.LoadScene(1);
@@ -138,24 +177,22 @@ public class GameManager : SingletonBehaviour<GameManager>
 
     public void LoadTitle()
     {
-        if (_isGameOver)
+        if (uiExceptionHandling())
         {
             reset();
             SceneManager.LoadScene(0);
             return;
         }
-        if (_isEscape)
+    }
+
+    private bool uiExceptionHandling()
+    {
+        if (_isGameOver || _isEscape || IsPause || SceneManager.GetActiveScene().buildIndex == 0)
         {
-            reset();
-            SceneManager.LoadScene(0);
-            return;
+            return true;
         }
-        if (IsPause)
-        {
-            reset();
-            SceneManager.LoadScene(0);
-            return;
-        }
+
+        return false;
     }
 
     public void AddKey()
