@@ -168,7 +168,7 @@ public class EnemyAI : Detectable
     }
     void UpdateCatch()
     {
-        transform.LookAt(_target);
+        // transform.LookAt(_target);
     }
 #endregion
 #region CoroutineDetail
@@ -225,6 +225,7 @@ public class EnemyAI : Detectable
     IEnumerator CoroutineCatch()
     {
         _animator.SetBool(EnemyAnimID.IsCatch, true);
+        _navMeshAgent.isStopped = true;
 
         while (true)
         {

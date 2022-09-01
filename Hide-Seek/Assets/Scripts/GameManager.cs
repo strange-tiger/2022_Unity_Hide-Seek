@@ -167,22 +167,7 @@ public class GameManager : SingletonBehaviour<GameManager>
     {
         Debug.Log("Quit");
 
-        if (_isGameOver)
-        {
-            Application.Quit();
-            return;
-        }
-        if (_isEscape)
-        {
-            Application.Quit();
-            return;
-        }
-        if (IsPause)
-        {
-            Application.Quit();
-            return;
-        }
-        if (SceneManager.GetActiveScene().buildIndex == 0)
+        if (uiExceptionHandling())
         {
             Application.Quit();
             return;
@@ -191,19 +176,7 @@ public class GameManager : SingletonBehaviour<GameManager>
 
     public void Restart()
     {
-        if (_isGameOver)
-        {
-            reset();
-            SceneManager.LoadScene(1);
-            return;
-        }
-        if (_isEscape)
-        {
-            reset();
-            SceneManager.LoadScene(1);
-            return;
-        }
-        if (IsPause)
+        if (uiExceptionHandling())
         {
             reset();
             SceneManager.LoadScene(1);
@@ -213,24 +186,34 @@ public class GameManager : SingletonBehaviour<GameManager>
 
     public void LoadTitle()
     {
-        if (_isGameOver)
+        if (uiExceptionHandling())
         {
             reset();
             SceneManager.LoadScene(0);
             return;
+        }
+    }
+
+    private bool uiExceptionHandling()
+    {
+        if (_isGameOver)
+        {
+            return true;
         }
         if (_isEscape)
         {
-            reset();
-            SceneManager.LoadScene(0);
-            return;
+            return true;
         }
         if (IsPause)
         {
-            reset();
-            SceneManager.LoadScene(0);
-            return;
+            return true;
         }
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     public void AddKey()
