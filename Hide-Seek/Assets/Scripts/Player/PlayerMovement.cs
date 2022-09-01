@@ -47,15 +47,12 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private float _RotateYAxisSpeed = 300f;
 
-    private float _rotationYAmount = 0f;
-    private float _rotationX = 0f;
     private void rotate()
     {
         _input.UpdateRotate();
-        _rotationYAmount = _RotateYAxisSpeed * _input.RotateY * Time.deltaTime;
 
-        float rotationY = _rotationYAmount;
-        Quaternion deltaRotation = Quaternion.Euler(_rotationX, rotationY, 0f);
+        float rotationY = _RotateYAxisSpeed * _input.RotateY * Time.deltaTime;
+        Quaternion deltaRotation = Quaternion.Euler(0f, rotationY, 0f);
 
         _rigidbody.MoveRotation(_rigidbody.rotation * deltaRotation);
     }

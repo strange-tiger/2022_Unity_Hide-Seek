@@ -35,7 +35,9 @@ public class PlayerInput : MonoBehaviour
     }
     private bool _isMoving = false;
     private PlayerHealth _health;
+#if UNITY_ANDROID == false
     private bool _cursorLock = true;
+#endif
 
     // ∏  »Æ¥Î√‡º“
     public event Action<bool> OnFullMap;
@@ -61,7 +63,9 @@ public class PlayerInput : MonoBehaviour
     private void Awake()
     {
         reset();
+#if UNITY_ANDROID == false
         _cursorLock = true;
+#endif
 
         _health = GetComponent<PlayerHealth>();
         _health.OnDeath -= this.reset; 
@@ -80,7 +84,9 @@ public class PlayerInput : MonoBehaviour
 
     private void Update()
     {
-        LockCursor();
+#if UNITY_ANDROID == false
+        CursorState();
+#endif
         UpdateFullMapToggle();
         UpdateUseWard();
         UpdateUseLure();
@@ -88,14 +94,23 @@ public class PlayerInput : MonoBehaviour
 
     public void UpdateMove()
     {
+#if UNITY_ANDROID
+        MoveFront = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick).y;
+        MoveRight = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick).x;
+#else
         MoveFront = Input.GetAxis(_MoveFrontAxisName);
         MoveRight = Input.GetAxis(_MoveRightAxisName);
+#endif
         UpdateShake();
     }
 
     public void UpdateRotate()
     {
+#if UNITY_ANDROID
+        RotateY = OVRInput.Get(OVRInput.Axis2D.SecondaryThumbstick).x;
+#else
         RotateY = Input.GetAxis(_RotateYAxisName);
+#endif
     }
 
     public void UpdateShake()
@@ -120,7 +135,7 @@ public class PlayerInput : MonoBehaviour
         IsMoving = isMoving;
     }
 
-    private void LockCursor()
+    private void CursorState()
     {
         Cursor.visible = !_cursorLock;
         if (_cursorLock)
@@ -135,7 +150,11 @@ public class PlayerInput : MonoBehaviour
 
     public void UpdateFullMapToggle()
     {
+#if UNITY_ANDROID
+        if(OVRInput.GetDown(OVRInput.Button.Three))
+#else
         if(Input.GetKeyDown(KeyCode.M))
+#endif
         {
             IsFullMap = !IsFullMap;
         }
@@ -143,7 +162,11 @@ public class PlayerInput : MonoBehaviour
 
     public void UpdateUseWard()
     {
-        if (Input.GetKey(KeyCode.Space))
+#if UNITY_ANDROID
+        if(OVRInput.GetDown(OVRInput.Button.One))
+#else
+        if (Input.GetKey(KeyCode.E))
+#endif
         {
             UseWard?.Invoke();
         }
@@ -151,18 +174,26 @@ public class PlayerInput : MonoBehaviour
 
     public void UpdateUseLure()
     {
-        if (Input.GetKey(KeyCode.LeftShift))
+#if UNITY_ANDROID
+        if(OVRInput.GetDown(OVRInput.Button.Two))
+#else
+        if (Input.GetKey(KeyCode.Q))
+#endif
         {
             UseLure?.Invoke();
         }
     }
 
+#if UNITY_ANDROID == false
     public void UnlockCursor() => _cursorLock = false;
+#endif
     public void ToggleCursorLock(bool isPause) => _cursorLock = !isPause;
     public void PauseMove(bool isPause) => IsMoving = !isPause;
     private void OnEnable()
     {
+#if UNITY_ANDROID == false
         GameManager.Instance.OnGameOver.AddListener(UnlockCursor);
+#endif
         GameManager.Instance.OnEscape.AddListener(UnlockCursor);
         GameManager.Instance.OnPause.AddListener(ToggleCursorLock);
         GameManager.Instance.OnPause.AddListener(PauseMove);
@@ -170,11 +201,13 @@ public class PlayerInput : MonoBehaviour
 
     private void OnDisable()
     {
+#if UNITY_ANDROID == false
+        UnlockCursor();
+        CursorState();
         GameManager.Instance.OnGameOver.RemoveListener(UnlockCursor);
         GameManager.Instance.OnEscape.RemoveListener(UnlockCursor);
+#endif
         GameManager.Instance.OnPause.RemoveListener(ToggleCursorLock);
         GameManager.Instance.OnPause.RemoveListener(PauseMove);
-        UnlockCursor();
-        LockCursor();
     }
 }
