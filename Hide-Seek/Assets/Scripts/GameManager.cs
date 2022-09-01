@@ -94,8 +94,8 @@ public class GameManager : SingletonBehaviour<GameManager>
 #if UNITY_ANDROID
         nonVRobj.SetActive(false);
         VRobj.SetActive(true);
-        nonVREventSystem.enabled = true;
-        VREventSystem.enabled = false;
+        nonVREventSystem.enabled = false;
+        VREventSystem.enabled = true;
 #else
         nonVRobj.SetActive(true);
         VRobj.SetActive(false);
