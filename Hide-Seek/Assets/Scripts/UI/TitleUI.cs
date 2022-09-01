@@ -9,13 +9,15 @@ public class TitleUI : MonoBehaviour
     private Button _quitBtn;
     private Button _howBtn;
     private GameObject _howPanel;
-    private void Awake()
+    private void OnEnable()
     {
         _startBtn = transform.GetChild(0).GetComponent<Button>();
         _quitBtn = transform.GetChild(1).GetComponent<Button>();
         _howBtn = transform.GetChild(2).GetComponent<Button>();
         _howPanel = transform.GetChild(3).gameObject;
+        Debug.Log(_howPanel.name);
         _howPanel.SetActive(false);
+        Debug.Log("1111111111111111111111111111111111111111111111111111111111111111");
 
         _startBtn.onClick.AddListener(start);
         _quitBtn.onClick.AddListener(Quit);
@@ -24,7 +26,12 @@ public class TitleUI : MonoBehaviour
 
     public void start() => GameManager.Instance.start();
     public void Quit() => GameManager.Instance.Quit();
-    public void ShowHowToPlay() => _howPanel.SetActive(!_howPanel.activeSelf);
+    //public void ShowHowToPlay() => _howPanel.SetActive(!_howPanel.activeSelf); 
+    private void ShowHowToPlay()
+    {
+        _howPanel.SetActive(!_howPanel.activeSelf);
+        Debug.Log(_howPanel.activeSelf);
+    }
 
     private void OnDisable()
     {
