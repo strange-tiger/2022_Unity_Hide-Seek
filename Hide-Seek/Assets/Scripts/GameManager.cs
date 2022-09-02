@@ -139,7 +139,11 @@ public class GameManager : SingletonBehaviour<GameManager>
 
     private void Update()
     {
+#if UNITY_ANDROID
+        if(OVRInput.GetDown(OVRInput.Button.Four))
+#else
         if(Input.GetKeyDown(KeyCode.Escape))
+#endif
         {
             IsPause = !IsPause;
         }

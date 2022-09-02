@@ -119,7 +119,7 @@ MonoBehaviour:
     m_Bits: 128
   marker: {fileID: 0}
   rotationSpeed: 60
-  _GetItemDist: 5
+  getDist: 5
   _SonarSound: {fileID: 8300000, guid: e25f64aafb77eb942af77507ed0dba8b, type: 3}
 --- !u!82 &6081228897323366895
 AudioSource:
@@ -133,7 +133,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.3
   m_Pitch: 1
   Loop: 0
   Mute: 0

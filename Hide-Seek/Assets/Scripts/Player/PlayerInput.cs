@@ -134,7 +134,7 @@ public class PlayerInput : MonoBehaviour
 
         IsMoving = isMoving;
     }
-    /*
+#if UNITY_ANDROID == false
     private void CursorState()
     {
         Cursor.visible = !_cursorLock;
@@ -147,7 +147,7 @@ public class PlayerInput : MonoBehaviour
             Cursor.lockState = CursorLockMode.Confined;
         }
     }
-    */
+#endif
     public void UpdateFullMapToggle()
     {
 #if UNITY_ANDROID
@@ -186,8 +186,8 @@ public class PlayerInput : MonoBehaviour
 
 #if UNITY_ANDROID == false
     public void UnlockCursor() => _cursorLock = false;
+    public void ToggleCursorLock(bool isPause) => _cursorLock = !isPause;
 #endif
-    //public void ToggleCursorLock(bool isPause) => _cursorLock = !isPause;
     public void PauseMove(bool isPause) => IsMoving = !isPause;
     private void OnEnable()
     {
@@ -204,10 +204,10 @@ public class PlayerInput : MonoBehaviour
 #if UNITY_ANDROID == false
         UnlockCursor();
         CursorState();
-        GameManager.Instance.OnGameOver.RemoveListener(UnlockCursor);
-        GameManager.Instance.OnEscape.RemoveListener(UnlockCursor);
-        GameManager.Instance.OnPause.RemoveListener(ToggleCursorLock);
+        //GameManager.Instance.OnGameOver.RemoveListener(UnlockCursor);
+        //GameManager.Instance.OnEscape.RemoveListener(UnlockCursor);
+        //GameManager.Instance.OnPause.RemoveListener(ToggleCursorLock);
 #endif
-        GameManager.Instance.OnPause.RemoveListener(PauseMove);
+        //GameManager.Instance.OnPause.RemoveListener(PauseMove);
     }
 }
