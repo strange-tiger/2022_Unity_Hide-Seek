@@ -17,7 +17,7 @@ public class TitleUI : MonoBehaviour
         _howPanel = transform.GetChild(3).gameObject;
         Debug.Log(_howPanel.name);
         _howPanel.SetActive(false);
-        Debug.Log("1111111111111111111111111111111111111111111111111111111111111111");
+        Debug.Log("Check the Title UI Once");
 
         _startBtn.onClick.AddListener(start);
         _quitBtn.onClick.AddListener(Quit);
