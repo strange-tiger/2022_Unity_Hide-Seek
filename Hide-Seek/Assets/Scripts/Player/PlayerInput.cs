@@ -11,14 +11,14 @@ public class PlayerInput : MonoBehaviour
 
     public float RotateX { get; private set; }
     public float RotateY { get; private set; }
-
+#if UNITY_ANDROID == false
     [SerializeField]
     private string _MoveFrontAxisName = "Vertical";
     [SerializeField]
     private string _MoveRightAxisName = "Horizontal";
     [SerializeField]
     private string _RotateYAxisName = "Mouse X";
-
+#endif
     // 플레이어 상태
     public event Action<bool> OnMove;
     public bool IsMoving
@@ -134,7 +134,7 @@ public class PlayerInput : MonoBehaviour
 
         IsMoving = isMoving;
     }
-
+#if UNITY_ANDROID == false
     private void CursorState()
     {
         Cursor.visible = !_cursorLock;
@@ -147,7 +147,7 @@ public class PlayerInput : MonoBehaviour
             Cursor.lockState = CursorLockMode.Confined;
         }
     }
-
+#endif
     public void UpdateFullMapToggle()
     {
 #if UNITY_ANDROID
@@ -186,16 +186,16 @@ public class PlayerInput : MonoBehaviour
 
 #if UNITY_ANDROID == false
     public void UnlockCursor() => _cursorLock = false;
-#endif
     public void ToggleCursorLock(bool isPause) => _cursorLock = !isPause;
+#endif
     public void PauseMove(bool isPause) => IsMoving = !isPause;
     private void OnEnable()
     {
 #if UNITY_ANDROID == false
         GameManager.Instance.OnGameOver.AddListener(UnlockCursor);
-#endif
         GameManager.Instance.OnEscape.AddListener(UnlockCursor);
         GameManager.Instance.OnPause.AddListener(ToggleCursorLock);
+#endif
         GameManager.Instance.OnPause.AddListener(PauseMove);
     }
 
@@ -204,10 +204,10 @@ public class PlayerInput : MonoBehaviour
 #if UNITY_ANDROID == false
         UnlockCursor();
         CursorState();
-        GameManager.Instance.OnGameOver.RemoveListener(UnlockCursor);
-        GameManager.Instance.OnEscape.RemoveListener(UnlockCursor);
+        //GameManager.Instance.OnGameOver.RemoveListener(UnlockCursor);
+        //GameManager.Instance.OnEscape.RemoveListener(UnlockCursor);
+        //GameManager.Instance.OnPause.RemoveListener(ToggleCursorLock);
 #endif
-        GameManager.Instance.OnPause.RemoveListener(ToggleCursorLock);
-        GameManager.Instance.OnPause.RemoveListener(PauseMove);
+        //GameManager.Instance.OnPause.RemoveListener(PauseMove);
     }
 }

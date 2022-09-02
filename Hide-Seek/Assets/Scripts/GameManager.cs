@@ -94,8 +94,8 @@ public class GameManager : SingletonBehaviour<GameManager>
 #if UNITY_ANDROID
         nonVRobj.SetActive(false);
         VRobj.SetActive(true);
-        nonVREventSystem.enabled = true;
-        VREventSystem.enabled = false;
+        nonVREventSystem.enabled = false;
+        VREventSystem.enabled = true;
 #else
         nonVRobj.SetActive(true);
         VRobj.SetActive(false);
@@ -139,7 +139,11 @@ public class GameManager : SingletonBehaviour<GameManager>
 
     private void Update()
     {
+#if UNITY_ANDROID
+        if(OVRInput.GetDown(OVRInput.Button.Four))
+#else
         if(Input.GetKeyDown(KeyCode.Escape))
+#endif
         {
             IsPause = !IsPause;
         }

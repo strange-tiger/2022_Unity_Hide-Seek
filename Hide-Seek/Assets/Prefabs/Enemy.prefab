@@ -962,7 +962,7 @@ Transform:
   m_GameObject: {fileID: 2916118504612131524}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_LocalScale: {x: 1.5000005, y: 1.5, z: 1.5000005}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 7458897250521906738}
@@ -1045,7 +1045,7 @@ MonoBehaviour:
   _WalkTime: 5
   _CatchTime: 5
   _WalkSpeed: 1
-  _RunSpeed: 8
+  _RunSpeed: 9
   _InitPosition: {x: 0, y: 0, z: 0}
   _TargetLayer:
     serializedVersion: 2

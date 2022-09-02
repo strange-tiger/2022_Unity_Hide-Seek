@@ -304,8 +304,8 @@ public class EnemyAI : Detectable
     }
     private void OnDisable()
     {
-        GameManager.Instance.OnGameOver.RemoveListener(TargetGameOver);
-        GameManager.Instance.OnEscape.RemoveListener(TargetEscaped);
+        //if (GameManager.Instance != null) GameManager.Instance.OnGameOver.RemoveListener(TargetGameOver);
+        //if (GameManager.Instance != null) GameManager.Instance.OnEscape.RemoveListener(TargetEscaped);
     }
 
     private new void OnTriggerStay(Collider other)
