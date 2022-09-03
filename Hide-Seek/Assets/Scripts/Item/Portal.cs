@@ -36,6 +36,11 @@ public class Portal : Item
     {
         base.OnTriggerEnter(other);
 
+        if (other.gameObject.layer == playerLayer)
+        {
+            _effects.SetActive(true);
+        }
+
         if (other.gameObject.layer == getterLayer)
         {
             GameManager.Instance.Escape();
