@@ -1043,7 +1043,7 @@ MonoBehaviour:
   _PrevState: 0
   _IdleTime: 2
   _WalkTime: 5
-  _CatchTime: 5
+  _CatchTime: 3
   _WalkSpeed: 1
   _RunSpeed: 9
   _InitPosition: {x: 0, y: 0, z: 0}
