@@ -26,7 +26,7 @@ public abstract class Detectable : MonoBehaviour
         wardLayer = LayerMask.NameToLayer("Ward");
     }
 
-    protected void OnTriggerStay(Collider other)
+    protected void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == playerLayer)
         {

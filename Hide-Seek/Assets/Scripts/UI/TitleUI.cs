@@ -16,7 +16,11 @@ public class TitleUI : MonoBehaviour
         _howBtn = transform.GetChild(2).GetComponent<Button>();
         _howPanel = transform.GetChild(3).gameObject;
         Debug.Log(_howPanel.name);
+#if UNITY_ANDROID
+        _howBtn.gameObject.SetActive(false);
+#else
         _howPanel.SetActive(false);
+#endif
         Debug.Log("Check the Title UI Once");
 
         _startBtn.onClick.AddListener(start);
@@ -26,7 +30,6 @@ public class TitleUI : MonoBehaviour
 
     public void start() => GameManager.Instance.start();
     public void Quit() => GameManager.Instance.Quit();
-    //public void ShowHowToPlay() => _howPanel.SetActive(!_howPanel.activeSelf); 
     private void ShowHowToPlay()
     {
         _howPanel.SetActive(!_howPanel.activeSelf);

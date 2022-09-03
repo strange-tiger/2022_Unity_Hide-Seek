@@ -30,12 +30,11 @@ public class SonarItem : Item
         DeactiveAfterUse();
     }
 
-    private new void OnTriggerStay(Collider other)
+    private new void OnTriggerEnter(Collider other)
     {
-        base.OnTriggerStay(other);
+        base.OnTriggerEnter(other);
 
-        float distance = (other.transform.position - transform.position).sqrMagnitude;
-        if (distance < getDist)
+        if (other.gameObject.layer == getterLayer)
         {
             _sonar?.SetActive(true);
             _used = true;

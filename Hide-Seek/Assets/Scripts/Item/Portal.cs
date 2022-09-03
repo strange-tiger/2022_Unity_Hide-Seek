@@ -32,15 +32,11 @@ public class Portal : Item
         marker.transform.Rotate(0f, rotationSpeed * Time.deltaTime, 0f, Space.World);
     }
 
-    private new void OnTriggerStay(Collider other)
+    private new void OnTriggerEnter(Collider other)
     {
-        base.OnTriggerStay(other);
+        base.OnTriggerEnter(other);
 
-        getDist = 2f;
-        _effects.SetActive(true);
-
-        float distance = (other.transform.position - transform.position).sqrMagnitude;
-        if (distance < getDist)
+        if (other.gameObject.layer == getterLayer)
         {
             GameManager.Instance.Escape();
         }

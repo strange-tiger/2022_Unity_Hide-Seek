@@ -30,7 +30,9 @@ public class PlayerMovement : MonoBehaviour
     {
         move();
         rotate();
+#if UNITY_ANDROID == false
         shake();
+#endif
     }
 
     [Header("Move")]

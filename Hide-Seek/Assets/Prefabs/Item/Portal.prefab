@@ -9667,7 +9667,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7953676647228873505
 Transform:
   m_ObjectHideFlags: 0
@@ -9703,7 +9703,7 @@ MonoBehaviour:
     m_Bits: 128
   marker: {fileID: 0}
   rotationSpeed: 60
-  _GetPortalDist: 2
+  getDist: 5
 --- !u!195 &1814393949
 NavMeshAgent:
   m_ObjectHideFlags: 0

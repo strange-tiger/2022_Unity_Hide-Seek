@@ -308,9 +308,9 @@ public class EnemyAI : Detectable
         //if (GameManager.Instance != null) GameManager.Instance.OnEscape.RemoveListener(TargetEscaped);
     }
 
-    private new void OnTriggerStay(Collider other)
+    private new void OnTriggerEnter(Collider other)
     {
-        base.OnTriggerStay(other);
+        base.OnTriggerEnter(other);
     }
     private new void OnTriggerExit(Collider other)
     {

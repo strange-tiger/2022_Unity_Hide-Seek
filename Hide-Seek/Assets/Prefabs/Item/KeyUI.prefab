@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 3879271909671714772}
   - component: {fileID: 2471385088498038971}
   - component: {fileID: 8174199141960025154}
-  - component: {fileID: 122815161}
   m_Layer: 5
   m_Name: KeyUI
   m_TagString: Untagged
@@ -89,16 +88,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &122815161
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7587510679117410462}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f81f828a76293f74c98e715f731ed7e2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rotationSpeed: 60

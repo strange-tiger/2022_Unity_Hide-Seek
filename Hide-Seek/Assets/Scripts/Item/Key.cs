@@ -14,12 +14,11 @@ public class Key : Item
         base.Update();
     }
 
-    private new void OnTriggerStay(Collider other)
+    private new void OnTriggerEnter(Collider other)
     {
-        base.OnTriggerStay(other);
-
-        float distance = (other.transform.position - transform.position).sqrMagnitude;
-        if(distance < getDist)
+        base.OnTriggerEnter(other);
+        
+        if (other.gameObject.layer == getterLayer)
         {
             GameManager.Instance.AddKey();
             gameObject.SetActive(false);
