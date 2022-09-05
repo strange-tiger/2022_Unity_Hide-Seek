@@ -1013,7 +1013,6 @@ GameObject:
   - component: {fileID: 2878870249189847096}
   - component: {fileID: 5423781337780277859}
   - component: {fileID: 1918876816267295537}
-  - component: {fileID: 2156646055011984749}
   - component: {fileID: 4483250658269014972}
   m_Layer: 3
   m_Name: OVRPlayer
