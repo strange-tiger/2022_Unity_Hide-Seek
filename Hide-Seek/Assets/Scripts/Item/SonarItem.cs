@@ -34,8 +34,7 @@ public class SonarItem : Item
     {
         base.OnTriggerStay(other);
 
-        float distance = (other.transform.position - transform.position).sqrMagnitude;
-        if (distance < getDist)
+        if (other.gameObject.layer == getterLayer)
         {
             _sonar?.SetActive(true);
             _used = true;

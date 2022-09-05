@@ -17,9 +17,8 @@ public class Key : Item
     private new void OnTriggerStay(Collider other)
     {
         base.OnTriggerStay(other);
-
-        float distance = (other.transform.position - transform.position).sqrMagnitude;
-        if(distance < getDist)
+        
+        if (other.gameObject.layer == getterLayer)
         {
             GameManager.Instance.AddKey();
             gameObject.SetActive(false);

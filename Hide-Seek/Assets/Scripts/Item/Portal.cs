@@ -36,11 +36,12 @@ public class Portal : Item
     {
         base.OnTriggerStay(other);
 
-        getDist = 2f;
-        _effects.SetActive(true);
+        if (other.gameObject.layer == playerLayer)
+        {
+            _effects.SetActive(true);
+        }
 
-        float distance = (other.transform.position - transform.position).sqrMagnitude;
-        if (distance < getDist)
+        if (other.gameObject.layer == getterLayer)
         {
             GameManager.Instance.Escape();
         }

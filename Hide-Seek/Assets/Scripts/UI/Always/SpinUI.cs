@@ -7,13 +7,13 @@ public class SpinUI : MonoBehaviour, ISpin
     [SerializeField]
     protected float rotationSpeed = 60f;
 
-    private void Update()
+    protected void Update()
     {
         spin();
     }
 
-    public void spin()
+    virtual public void spin()
     {
-        transform.Rotate(0f, rotationSpeed * Time.deltaTime, 0f, Space.World);
+        transform.Rotate(0f, rotationSpeed * Time.deltaTime, 0f);
     }
 }

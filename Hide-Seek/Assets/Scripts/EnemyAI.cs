@@ -34,7 +34,7 @@ public class EnemyAI : Detectable
     [SerializeField]
     private float _WalkTime = 5f;
     [SerializeField]
-    private float _CatchTime = 5f;
+    private float _CatchTime = 3f;
 
     // ¿Ãµø
     [Header("Move")]

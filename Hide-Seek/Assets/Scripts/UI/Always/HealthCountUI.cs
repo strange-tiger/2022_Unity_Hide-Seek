@@ -26,7 +26,9 @@ public class HealthCountUI : MonoBehaviour
         { 
             return;
         }
+#if UNITY_ANDROID == false
         StartCoroutine(ChangeSize());
+#endif
     }
 
     [SerializeField]
