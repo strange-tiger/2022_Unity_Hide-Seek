@@ -32,9 +32,9 @@ public class Portal : Item
         marker.transform.Rotate(0f, rotationSpeed * Time.deltaTime, 0f, Space.World);
     }
 
-    private new void OnTriggerEnter(Collider other)
+    private new void OnTriggerStay(Collider other)
     {
-        base.OnTriggerEnter(other);
+        base.OnTriggerStay(other);
 
         if (other.gameObject.layer == playerLayer)
         {

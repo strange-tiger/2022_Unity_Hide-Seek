@@ -14,9 +14,9 @@ public class Key : Item
         base.Update();
     }
 
-    private new void OnTriggerEnter(Collider other)
+    private new void OnTriggerStay(Collider other)
     {
-        base.OnTriggerEnter(other);
+        base.OnTriggerStay(other);
         
         if (other.gameObject.layer == getterLayer)
         {
